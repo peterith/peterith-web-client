@@ -1,0 +1,17 @@
+.contact {
+  text-align: center;
+}
+
+.fas,
+.fab {
+  margin: 0 5px;
+  padding: 5px;
+  border: 2px solid;
+  border-radius: 100%;
+  color: #334;
+}
+
+.fas:hover,
+.fab:hover {
+  color: #f66;
+}
