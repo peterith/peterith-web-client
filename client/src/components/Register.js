@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import Message from './Message';
-import './Register.css';
+import React, { useState, useEffect } from "react";
+import gql from "graphql-tag";
+import { useMutation, useLazyQuery } from "@apollo/react-hooks";
+import Message from "./Message";
+import "./Register.css";
 
 export default () => {
   const [formValues, setFormValues] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: ""
   });
 
   const [formValueClasses, setFormValueClasses] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: ""
   });
 
   const [formMessages, setFormMessages] = useState({
-    username: 'Username is required to join the club!',
-    email: 'How will you receive my emails?',
-    password: 'Make sure your password is at least 8 characters!'
+    username: "Username is required to join the club!",
+    email: "How will you receive my emails?",
+    password: "Make sure your password is at least 8 characters!"
   });
 
   const REGISTER_USER = gql`
@@ -38,8 +38,17 @@ export default () => {
   `;
 
   const CHECK_USERNAME = gql`
-    query CheckUsername($user: UserInput!) {
-      checkUsername(user: $user) {
+    query CheckUsername($username: String!) {
+      checkUsername(username: $username) {
+        success
+        message
+      }
+    }
+  `;
+
+  const CHECK_EMAIL = gql`
+    query CheckEmail($email: String!) {
+      checkEmail(email: $email) {
         success
         message
       }
@@ -47,26 +56,58 @@ export default () => {
   `;
 
   const [registerUser] = useMutation(REGISTER_USER);
-  const { data } = useQuery(CHECK_USERNAME, {
-    variables: {
-      user: {
-        username: formValues.username
-      }
+  const [checkUsername, checkUserNameOption] = useLazyQuery(CHECK_USERNAME);
+  const [checkEmail, checkEmailOption] = useLazyQuery(CHECK_EMAIL);
+
+  useEffect(() => {
+    if (
+      checkUserNameOption.data &&
+      !checkUserNameOption.data.checkUsername.success
+    ) {
+      setFormMessages({
+        ...formMessages,
+        username: checkUserNameOption.data.checkUsername.message
+      });
+      setFormValueClasses({ ...formValueClasses, username: "invalid" });
+    } else {
+      setFormMessages({
+        ...formMessages,
+        username: "Username is required to join the club!"
+      });
+      setFormValueClasses({ ...formValueClasses, username: "" });
     }
-  });
+  }, [checkUserNameOption.data]);
+
+  useEffect(() => {
+    if (checkEmailOption.data && !checkEmailOption.data.checkEmail.success) {
+      setFormMessages({
+        ...formMessages,
+        email: checkEmailOption.data.checkEmail.message
+      });
+      setFormValueClasses({ ...formValueClasses, email: "invalid" });
+    } else {
+      setFormMessages({
+        ...formMessages,
+        email: "How will you receive my emails?"
+      });
+      setFormValueClasses({ ...formValueClasses, email: "" });
+    }
+  }, [checkEmailOption.data]);
 
   const handleSubmit = event => {
+    event.preventDefault();
     const newFormValueClasses = {
       username: formValueClasses.username,
       email: formValueClasses.email,
       password: formValueClasses.password
     };
 
-    event.preventDefault();
-    if (!formValues.username) newFormValueClasses.username = 'invalid';
-    if (!formValues.email) newFormValueClasses.email = 'invalid';
+    console.log(formValues.password.length);
+    if (!formValues.username) newFormValueClasses.username = "invalid";
+    if (!formValues.email) newFormValueClasses.email = "invalid";
     if (formValues.password.length < 8)
-      newFormValueClasses.password = 'invalid';
+      newFormValueClasses.password = "invalid";
+    else newFormValueClasses.password = "";
     setFormValueClasses(newFormValueClasses);
     if (
       !newFormValueClasses.username &&
@@ -86,19 +127,24 @@ export default () => {
     }
   };
 
-  const handleBlur = event => {
+  const handleBlurOnUsername = event => {
     event.preventDefault();
 
-    if (!data.checkUsername.success) {
-      setFormValueClasses({ ...formValueClasses, username: 'invalid' });
-      setFormMessages({ ...formMessages, username: 'Username is taken!' });
-    } else {
-      setFormValueClasses({ ...formValueClasses, username: '' });
-      setFormMessages({
-        ...formMessages,
-        username: 'Username is required to join the club!'
-      });
-    }
+    checkUsername({
+      variables: {
+        username: formValues.username
+      }
+    });
+  };
+
+  const handleBlurOnEmail = event => {
+    event.preventDefault();
+
+    checkEmail({
+      variables: {
+        email: formValues.email
+      }
+    });
   };
 
   return (
@@ -121,8 +167,8 @@ export default () => {
               [event.target.name]: event.target.value
             })
           }
-          onBlur={handleBlur}
-        />{' '}
+          onBlur={handleBlurOnUsername}
+        />{" "}
         {formValueClasses.username && (
           <Message>{formMessages.username}</Message>
         )}
@@ -140,7 +186,8 @@ export default () => {
               [event.target.name]: event.target.value
             })
           }
-        />{' '}
+          onBlur={handleBlurOnEmail}
+        />{" "}
         {formValueClasses.email && <Message>{formMessages.email}</Message>}
         <br />
         Password <span className="mandatory">*</span>
@@ -156,7 +203,7 @@ export default () => {
               [event.target.name]: event.target.value
             })
           }
-        />{' '}
+        />{" "}
         {formValueClasses.password && (
           <Message>{formMessages.password}</Message>
         )}

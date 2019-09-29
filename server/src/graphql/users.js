@@ -1,16 +1,22 @@
-import { gql } from 'apollo-server-express';
-import models from '../models';
-import bcrypt from 'bcrypt';
+import { gql } from "apollo-server-express";
+import models from "../models";
+import bcrypt from "bcrypt";
 
 export const typeDefs = gql`
   type Query {
     login(user: UserInput!): UserResponse!
-    checkUsername(user: UserInput!): UserResponse!
+    checkUsername(username: String!): Response!
+    checkEmail(email: String!): Response!
   }
 
   type Mutation {
     registerUser(user: UserInput!): UserResponse!
     updateUser(user: UserInput!): UserResponse!
+  }
+
+  type Response {
+    success: Boolean!
+    message: String!
   }
 
   type UserResponse {
@@ -57,17 +63,17 @@ export const resolvers = {
         });
 
         if (!user) {
-          throw 'Username is not registered';
+          throw "Username is not registered";
         }
 
         if (await bcrypt.compare(args.user.password, user.password)) {
           return {
             success: true,
-            message: 'Login successfully',
+            message: "Login successfully",
             payload: user
           };
         } else {
-          throw 'Incorrect password';
+          throw "Incorrect password";
         }
       } catch (error) {
         return {
@@ -79,16 +85,37 @@ export const resolvers = {
     checkUsername: async (_parent, args, _context, _info) => {
       try {
         const user = await models.User.findOne({
-          username: args.user.username
+          username: args.username
         });
 
         if (user) {
-          throw 'Username is already registered';
+          throw "Username is already registered";
         }
 
         return {
           success: true,
-          message: 'Username is not registered'
+          message: "Username is not registered"
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error
+        };
+      }
+    },
+    checkEmail: async (_parent, args, _context, _info) => {
+      try {
+        const user = await models.User.findOne({
+          email: args.email
+        });
+
+        if (user) {
+          throw "Email is already registered";
+        }
+
+        return {
+          success: true,
+          message: "Email is not registered"
         };
       } catch (error) {
         return {
@@ -106,14 +133,14 @@ export const resolvers = {
           username: args.user.username
         });
         if (existedUsername) {
-          throw 'Username is already registered';
+          throw "Username is already registered";
         }
 
         const existedEmail = await models.User.findOne({
           email: args.user.email
         });
         if (existedEmail) {
-          throw 'Email is already registered';
+          throw "Email is already registered";
         }
 
         args.user.password = await bcrypt.hash(
@@ -124,7 +151,7 @@ export const resolvers = {
 
         return {
           success: true,
-          message: 'User created successfully',
+          message: "User created successfully",
           payload: user
         };
       } catch (error) {
@@ -148,7 +175,7 @@ export const resolvers = {
 
         return {
           success: true,
-          message: 'User updated successfully',
+          message: "User updated successfully",
           payload: user
         };
       } catch (e) {
@@ -156,7 +183,7 @@ export const resolvers = {
 
         return {
           success: false,
-          message: 'Failed to update user'
+          message: "Failed to update user"
         };
       }
     }
