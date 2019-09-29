@@ -27,6 +27,7 @@ const server = new ApolloServer({
 
 const app = express();
 server.applyMiddleware({ app });
+app.use(express.json());
 app.listen(process.env.PORT, () =>
   console.log(
     `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`

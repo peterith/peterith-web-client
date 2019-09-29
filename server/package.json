@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "build": "babel src -d lib",
-    "start": "nodemon --exec babel-node src/app.js",
-    "test": "jest"
+    "start": "node src/app.js",
+    "test": "jest",
+    "dev": "concurrently \"nodemon --exec babel-node src/app.js\" \"npm start --prefix ../client\""
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
     "@babel/preset-env": "^7.6.0",
+    "concurrently": "^4.1.2",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.3.0",

@@ -13,17 +13,39 @@ export default () => {
       </section>
       <section>
         <h2>Software Engineering</h2>
-        <p>Languages: JavaScript, Python, Java, C++, C, SQL</p>
-        <p>Frameworks: React, Apollo GraphQL, Express</p>
-        <p>Tools: Git</p>
+        <p>
+          <strong>Languages:</strong> JavaScript, Python, Java, C++, C, SQL
+        </p>
+        <p>
+          <strong>Frameworks/Tools:</strong> Git, React, Apollo GraphQL,
+          Express, Spring, MongoDB
+        </p>
+        <p>
+          <strong>Interests:</strong> Web Development, Internet of Things,
+          Embedded Systems, GPU programming
+        </p>
       </section>
       <section>
         <h2>Machine Learning</h2>
         <p>
-          Interests: Computer Vision, Object Detection, Face Recognition,
-          Recurrent neural network
+          <strong>Interests:</strong> Computer Vision, Object Detection, Face
+          Recognition, Recurrent Neural Network
         </p>
-        <p>Frameworks: Tensorflow, Keras</p>
+        <p>
+          <strong>Frameworks/Tools:</strong> Tensorflow, Keras, scikit-learn,
+          MATLAB
+        </p>
+      </section>
+      <section>
+        <h2>There's more to me!</h2>
+        <p>
+          <strong>Qualifications:</strong> MEng (Hons) Biomedical Engineering @
+          Imperial College London (1st Class Honours)
+        </p>
+        <p>
+          <strong>Other Interests:</strong> PC hardware, 3D printing, strength
+          training, singing
+        </p>
       </section>
     </>
   );

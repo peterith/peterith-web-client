@@ -1,0 +1,12 @@
+input {
+  font-size: 0.8em;
+  margin: 5px 0;
+}
+
+.mandatory {
+  color: #f66;
+}
+
+.invalid {
+  border: 2px solid #f66;
+}

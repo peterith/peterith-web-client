@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 export const typeDefs = gql`
   type Query {
     login(user: UserInput!): UserResponse!
+    checkUsername(user: UserInput!): UserResponse!
   }
 
   type Mutation {
@@ -68,6 +69,27 @@ export const resolvers = {
         } else {
           throw 'Incorrect password';
         }
+      } catch (error) {
+        return {
+          success: false,
+          message: error
+        };
+      }
+    },
+    checkUsername: async (_parent, args, _context, _info) => {
+      try {
+        const user = await models.User.findOne({
+          username: args.user.username
+        });
+
+        if (user) {
+          throw 'Username is already registered';
+        }
+
+        return {
+          success: true,
+          message: 'Username is not registered'
+        };
       } catch (error) {
         return {
           success: false,
