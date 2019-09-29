@@ -64,33 +64,50 @@ export default () => {
       checkUserNameOption.data &&
       !checkUserNameOption.data.checkUsername.success
     ) {
-      setFormMessages({
-        ...formMessages,
-        username: checkUserNameOption.data.checkUsername.message
+      console.log(checkUserNameOption.data);
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          username: checkUserNameOption.data.checkUsername.message
+        };
       });
-      setFormValueClasses({ ...formValueClasses, username: "invalid" });
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, username: "invalid" };
+      });
     } else {
-      setFormMessages({
-        ...formMessages,
-        username: "Username is required to join the club!"
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          username: "Username is required to join the club!"
+        };
       });
-      setFormValueClasses({ ...formValueClasses, username: "" });
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, username: "" };
+      });
     }
   }, [checkUserNameOption.data]);
 
   useEffect(() => {
     if (checkEmailOption.data && !checkEmailOption.data.checkEmail.success) {
-      setFormMessages({
-        ...formMessages,
-        email: checkEmailOption.data.checkEmail.message
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          email: checkEmailOption.data.checkEmail.message
+        };
       });
-      setFormValueClasses({ ...formValueClasses, email: "invalid" });
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, email: "invalid" };
+      });
     } else {
-      setFormMessages({
-        ...formMessages,
-        email: "How will you receive my emails?"
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          email: "How will you receive my emails?"
+        };
       });
-      setFormValueClasses({ ...formValueClasses, email: "" });
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, email: "" };
+      });
     }
   }, [checkEmailOption.data]);
 
@@ -102,12 +119,10 @@ export default () => {
       password: formValueClasses.password
     };
 
-    console.log(formValues.password.length);
     if (!formValues.username) newFormValueClasses.username = "invalid";
     if (!formValues.email) newFormValueClasses.email = "invalid";
     if (formValues.password.length < 8)
       newFormValueClasses.password = "invalid";
-    else newFormValueClasses.password = "";
     setFormValueClasses(newFormValueClasses);
     if (
       !newFormValueClasses.username &&
@@ -123,28 +138,70 @@ export default () => {
           }
         }
       });
-    } else {
-    }
+    } else alert("fail");
   };
 
   const handleBlurOnUsername = event => {
     event.preventDefault();
-
-    checkUsername({
-      variables: {
-        username: formValues.username
-      }
-    });
+    if (!formValues.username) {
+      setFormValueClasses(prevFormValueClasses => {
+        return {
+          ...prevFormValueClasses,
+          username: "invalid"
+        };
+      });
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          username: "Username is required to join the club!"
+        };
+      });
+    } else {
+      checkUsername({
+        variables: {
+          username: formValues.username
+        }
+      });
+    }
   };
 
   const handleBlurOnEmail = event => {
     event.preventDefault();
 
-    checkEmail({
-      variables: {
-        email: formValues.email
-      }
-    });
+    if (!formValues.email) {
+      setFormValueClasses(prevFormValueClasses => {
+        return {
+          ...prevFormValueClasses,
+          email: "invalid"
+        };
+      });
+      setFormMessages(prevFormMessages => {
+        return {
+          ...prevFormMessages,
+          email: "How will you receive my emails?"
+        };
+      });
+    } else {
+      checkEmail({
+        variables: {
+          email: formValues.email
+        }
+      });
+    }
+  };
+
+  const handleBlurOnPassword = event => {
+    event.preventDefault();
+
+    if (formValues.password.length < 8) {
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, password: "invalid" };
+      });
+    } else {
+      setFormValueClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, password: "" };
+      });
+    }
   };
 
   return (
@@ -203,6 +260,7 @@ export default () => {
               [event.target.name]: event.target.value
             })
           }
+          onBlur={handleBlurOnPassword}
         />{" "}
         {formValueClasses.password && (
           <Message>{formMessages.password}</Message>
