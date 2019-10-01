@@ -2,8 +2,7 @@
   text-align: center;
 }
 
-.fas,
-.fab {
+.social-link {
   margin: 0 5px;
   padding: 5px;
   border: 2px solid;
@@ -11,7 +10,6 @@
   color: #334;
 }
 
-.fas:hover,
-.fab:hover {
+.social-link:hover {
   color: #f66;
 }

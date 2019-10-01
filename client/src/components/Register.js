@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from "react";
-import gql from "graphql-tag";
-import { useMutation, useLazyQuery } from "@apollo/react-hooks";
-import Message from "./Message";
-import "./Register.css";
+import React, { useState, useEffect } from 'react';
+import gql from 'graphql-tag';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import Message from './Message';
+import './Register.css';
 
 export default () => {
-  const [formValues, setFormValues] = useState({
-    username: "",
-    email: "",
-    password: ""
-  });
+  const messagesEnum = {
+    USERNAME_INVALID: 'Username is required to join the club!',
+    EMAIL_INVALID: 'How will you receive my emails?',
+    PASSWORD_INVALID: 'Make sure your password is at least 8 characters!'
+  };
 
-  const [formValueClasses, setFormValueClasses] = useState({
-    username: "",
-    email: "",
-    password: ""
-  });
-
-  const [formMessages, setFormMessages] = useState({
-    username: "Username is required to join the club!",
-    email: "How will you receive my emails?",
-    password: "Make sure your password is at least 8 characters!"
-  });
+  Object.freeze(messagesEnum);
+  const formClassesEnum = {
+    INVALID: 'invalid',
+    VALID: 'valid'
+  };
 
   const REGISTER_USER = gql`
     mutation RegisterUser($user: UserInput!) {
@@ -55,75 +49,80 @@ export default () => {
     }
   `;
 
+  const [formValues, setFormValues] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const [formClasses, setFormClasses] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const [formMessages, setFormMessages] = useState({
+    username: messagesEnum.USERNAME_INVALID,
+    email: messagesEnum.EMAIL_INVALID,
+    password: messagesEnum.PASSWORD_INVALID
+  });
+
   const [registerUser] = useMutation(REGISTER_USER);
-  const [checkUsername, checkUserNameOption] = useLazyQuery(CHECK_USERNAME);
-  const [checkEmail, checkEmailOption] = useLazyQuery(CHECK_EMAIL);
+  const [checkUsername, { data: usernameData }] = useLazyQuery(CHECK_USERNAME);
+  const [checkEmail, { data: emailData }] = useLazyQuery(CHECK_EMAIL);
 
   useEffect(() => {
-    if (
-      checkUserNameOption.data &&
-      !checkUserNameOption.data.checkUsername.success
-    ) {
-      console.log(checkUserNameOption.data);
+    if (usernameData && !usernameData.checkUsername.success) {
       setFormMessages(prevFormMessages => {
         return {
           ...prevFormMessages,
-          username: checkUserNameOption.data.checkUsername.message
+          username: usernameData.checkUsername.message
         };
       });
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, username: "invalid" };
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, username: formClassesEnum.INVALID };
       });
-    } else {
-      setFormMessages(prevFormMessages => {
-        return {
-          ...prevFormMessages,
-          username: "Username is required to join the club!"
-        };
-      });
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, username: "" };
+    } else if (usernameData && usernameData.checkUsername.success) {
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, username: formClassesEnum.VALID };
       });
     }
-  }, [checkUserNameOption.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usernameData]);
 
   useEffect(() => {
-    if (checkEmailOption.data && !checkEmailOption.data.checkEmail.success) {
+    if (emailData && !emailData.checkEmail.success) {
       setFormMessages(prevFormMessages => {
         return {
           ...prevFormMessages,
-          email: checkEmailOption.data.checkEmail.message
+          email: emailData.checkEmail.message
         };
       });
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, email: "invalid" };
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, email: formClassesEnum.INVALID };
       });
-    } else {
-      setFormMessages(prevFormMessages => {
-        return {
-          ...prevFormMessages,
-          email: "How will you receive my emails?"
-        };
-      });
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, email: "" };
+    } else if (emailData && emailData.checkEmail.success) {
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, email: formClassesEnum.VALID };
       });
     }
-  }, [checkEmailOption.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailData]);
 
   const handleSubmit = event => {
     event.preventDefault();
     const newFormValueClasses = {
-      username: formValueClasses.username,
-      email: formValueClasses.email,
-      password: formValueClasses.password
+      username: formClasses.username,
+      email: formClasses.email,
+      password: formClasses.password
     };
 
-    if (!formValues.username) newFormValueClasses.username = "invalid";
-    if (!formValues.email) newFormValueClasses.email = "invalid";
+    if (!formValues.username)
+      newFormValueClasses.username = formClassesEnum.INVALID;
+    if (!formValues.email) newFormValueClasses.email = formClassesEnum.INVALID;
     if (formValues.password.length < 8)
-      newFormValueClasses.password = "invalid";
-    setFormValueClasses(newFormValueClasses);
+      newFormValueClasses.password = formClassesEnum.INVALID;
+    setFormClasses(newFormValueClasses);
     if (
       !newFormValueClasses.username &&
       !newFormValueClasses.email &&
@@ -138,22 +137,22 @@ export default () => {
           }
         }
       });
-    } else alert("fail");
+    } else alert('fail');
   };
 
   const handleBlurOnUsername = event => {
     event.preventDefault();
     if (!formValues.username) {
-      setFormValueClasses(prevFormValueClasses => {
+      setFormClasses(prevFormValueClasses => {
         return {
           ...prevFormValueClasses,
-          username: "invalid"
+          username: formClassesEnum.INVALID
         };
       });
       setFormMessages(prevFormMessages => {
         return {
           ...prevFormMessages,
-          username: "Username is required to join the club!"
+          username: messagesEnum.USERNAME_INVALID
         };
       });
     } else {
@@ -169,16 +168,16 @@ export default () => {
     event.preventDefault();
 
     if (!formValues.email) {
-      setFormValueClasses(prevFormValueClasses => {
+      setFormClasses(prevFormValueClasses => {
         return {
           ...prevFormValueClasses,
-          email: "invalid"
+          email: formClassesEnum.INVALID
         };
       });
       setFormMessages(prevFormMessages => {
         return {
           ...prevFormMessages,
-          email: "How will you receive my emails?"
+          email: messagesEnum.EMAIL_INVALID
         };
       });
     } else {
@@ -194,12 +193,12 @@ export default () => {
     event.preventDefault();
 
     if (formValues.password.length < 8) {
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, password: "invalid" };
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, password: formClassesEnum.INVALID };
       });
     } else {
-      setFormValueClasses(prevFormValueClasses => {
-        return { ...prevFormValueClasses, password: "" };
+      setFormClasses(prevFormValueClasses => {
+        return { ...prevFormValueClasses, password: formClassesEnum.VALID };
       });
     }
   };
@@ -211,13 +210,13 @@ export default () => {
         Sign up to receive the emails from me, from time to time. I won't spam!
       </p>
       <form onSubmit={handleSubmit}>
-        Username <span className="mandatory">*</span>
+        Username <span className="red">*</span>
         <br />
         <input
           type="text"
           name="username"
           value={formValues.username}
-          className={formValueClasses.username}
+          className={formClasses.username}
           onChange={event =>
             setFormValues({
               ...formValues,
@@ -225,18 +224,21 @@ export default () => {
             })
           }
           onBlur={handleBlurOnUsername}
-        />{" "}
-        {formValueClasses.username && (
+        />{' '}
+        {formClasses.username === formClassesEnum.VALID && (
+          <span className="fas fa-check green" />
+        )}
+        {formClasses.username === formClassesEnum.INVALID && (
           <Message>{formMessages.username}</Message>
         )}
         <br />
-        Email <span className="mandatory">*</span>
+        Email <span className="red">*</span>
         <br />
         <input
           type="text"
           name="email"
           value={formValues.email}
-          className={formValueClasses.email}
+          className={formClasses.email}
           onChange={event =>
             setFormValues({
               ...formValues,
@@ -244,16 +246,21 @@ export default () => {
             })
           }
           onBlur={handleBlurOnEmail}
-        />{" "}
-        {formValueClasses.email && <Message>{formMessages.email}</Message>}
+        />{' '}
+        {formClasses.email === formClassesEnum.VALID && (
+          <span className="fas fa-check green" />
+        )}
+        {formClasses.email === formClassesEnum.INVALID && (
+          <Message>{formMessages.email}</Message>
+        )}
         <br />
-        Password <span className="mandatory">*</span>
+        Password <span className="red">*</span>
         <br />
         <input
           type="password"
           name="password"
           value={formValues.password}
-          className={formValueClasses.password}
+          className={formClasses.password}
           onChange={event =>
             setFormValues({
               ...formValues,
@@ -261,12 +268,15 @@ export default () => {
             })
           }
           onBlur={handleBlurOnPassword}
-        />{" "}
-        {formValueClasses.password && (
+        />{' '}
+        {formClasses.password === formClassesEnum.VALID && (
+          <span className="fas fa-check green" />
+        )}
+        {formClasses.password === formClassesEnum.INVALID && (
           <Message>{formMessages.password}</Message>
         )}
         <br />
-        <input type="submit" />
+        <input type="submit" value="register" />
       </form>
     </div>
   );

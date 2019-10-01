@@ -12,21 +12,21 @@ export default () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="fab fa-linkedin-in" />
+          <span className="fab fa-linkedin-in social-link" />
         </a>
         <a
           href="https://www.github.com/peterith"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="fab fa-github" />
+          <span className="fab fa-github social-link" />
         </a>
         <a
           href="mailto:p.rithisith@hotmail.com"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="fas fa-envelope" />
+          <span className="fas fa-envelope social-link" />
         </a>
       </section>
     </div>

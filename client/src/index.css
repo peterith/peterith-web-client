@@ -13,8 +13,10 @@ main {
 }
 
 h1 {
+  color: #666;
   font-size: 1.8em;
   margin: 50px 0;
+  border-bottom: 2px solid #334;
 }
 
 h2 {

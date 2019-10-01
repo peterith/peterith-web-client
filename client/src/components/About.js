@@ -17,8 +17,8 @@ export default () => {
           <strong>Languages:</strong> JavaScript, Python, Java, C++, C, SQL
         </p>
         <p>
-          <strong>Frameworks/Tools:</strong> Git, React, Apollo GraphQL,
-          Express, Spring, MongoDB
+          <strong>Frameworks/Tools:</strong> React, Apollo GraphQL, Express,
+          Spring, MongoDB, Git, AWS
         </p>
         <p>
           <strong>Interests:</strong> Web Development, Internet of Things,
@@ -41,6 +41,9 @@ export default () => {
         <p>
           <strong>Qualifications:</strong> MEng (Hons) Biomedical Engineering @
           Imperial College London (1st Class Honours)
+        </p>
+        <p>
+          <strong>Human Languages:</strong> English, Thai
         </p>
         <p>
           <strong>Other Interests:</strong> PC hardware, 3D printing, strength

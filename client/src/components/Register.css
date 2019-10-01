@@ -3,10 +3,13 @@ input {
   margin: 5px 0;
 }
 
-.mandatory {
+.red {
   color: #f66;
 }
 
+.green {
+  color: #6f6;
+}
 .invalid {
   border: 2px solid #f66;
 }
