@@ -1,9 +1,8 @@
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-import { typeDefs, resolvers } from "./graphql/users";
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { typeDefs, resolvers } from './graphql/users';
 
 dotenv.config();
 
@@ -17,8 +16,7 @@ mongoose.connect(
 );
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection error:"));
-db.once("open", () => console.log("Connected to MongoDB!"));
+db.on('error', console.error.bind(console, 'Connection error:'));
 
 const server = new ApolloServer({
   typeDefs,
@@ -26,12 +24,6 @@ const server = new ApolloServer({
 });
 
 const app = express();
-server.applyMiddleware({
-  app
-});
-app.use(express.json());
-app.listen(process.env.PORT, () =>
-  console.log(
-    `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
-  )
-);
+
+server.applyMiddleware({ app });
+app.listen(process.env.SERVER_PORT);
