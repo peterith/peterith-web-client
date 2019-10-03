@@ -10,7 +10,7 @@ import App from './components/App';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: `http://${process.env.REACT_APP_NODE_HOST}:${process.env.REACT_APP_NODE_PORT}/graphql`
+  uri: `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/graphql`
 });
 
 const client = new ApolloClient({ cache, link });
