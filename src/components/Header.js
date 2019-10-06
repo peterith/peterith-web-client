@@ -17,6 +17,14 @@ export default () => {
       <Link to="/register" className="link">
         register
       </Link>
+      ,{' '}
+      <Link to="/login" className="link">
+        login
+      </Link>
+      ,{' '}
+      <Link to="/profile" className="link">
+        profile
+      </Link>
       {' };'}
     </nav>
   );

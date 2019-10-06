@@ -276,7 +276,7 @@ export default () => {
           <Message>{formMessages.password}</Message>
         )}
         <br />
-        <input type="submit" value="register" />
+        <input type="submit" value="Register" />
       </form>
     </div>
   );

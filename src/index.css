@@ -23,3 +23,8 @@ h2 {
   font-size: 1.3em;
   color: #f66;
 }
+
+input {
+  font-size: 0.8em;
+  margin: 5px 0;
+}
