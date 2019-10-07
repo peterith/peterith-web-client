@@ -17,3 +17,12 @@ nav {
   font-weight: bold;
   font-size: 1.6em;
 }
+
+.nav-main {
+  display: inline-block;
+}
+
+.nav-user {
+  font-size: 0.7em;
+  float: right;
+}

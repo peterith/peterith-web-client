@@ -4,29 +4,25 @@ import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import Message from './Message';
 import './Register.css';
 
-export default () => {
+export default ({ history }) => {
   const messagesEnum = {
     USERNAME_INVALID: 'Username is required to join the club!',
     EMAIL_INVALID: 'How will you receive my emails?',
     PASSWORD_INVALID: 'Make sure your password is at least 8 characters!'
   };
-
   Object.freeze(messagesEnum);
+
   const formClassesEnum = {
     INVALID: 'invalid',
     VALID: 'valid'
   };
+  Object.freeze(formClassesEnum);
 
   const REGISTER_USER = gql`
     mutation RegisterUser($user: UserInput!) {
       registerUser(user: $user) {
         success
         message
-        payload {
-          firstName
-          lastName
-          email
-        }
       }
     }
   `;
@@ -124,9 +120,9 @@ export default () => {
       newFormValueClasses.password = formClassesEnum.INVALID;
     setFormClasses(newFormValueClasses);
     if (
-      !newFormValueClasses.username &&
-      !newFormValueClasses.email &&
-      !newFormValueClasses.password
+      newFormValueClasses.username === formClassesEnum.VALID &&
+      newFormValueClasses.email === formClassesEnum.VALID &&
+      newFormValueClasses.password === formClassesEnum.VALID
     ) {
       registerUser({
         variables: {
@@ -137,7 +133,11 @@ export default () => {
           }
         }
       });
-    } else alert('fail');
+
+      history.push('/login');
+    } else {
+      alert('fail');
+    }
   };
 
   const handleBlurOnUsername = event => {
@@ -276,7 +276,7 @@ export default () => {
           <Message>{formMessages.password}</Message>
         )}
         <br />
-        <input type="submit" value="register" />
+        <input type="submit" value="Register" />
       </form>
     </div>
   );
