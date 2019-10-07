@@ -15,16 +15,14 @@ export default () => {
       }
     }
   `;
-  const { loading, error, data } = useQuery(ME);
+  const { data } = useQuery(ME);
 
-  if (loading) return <p>loading...</p>;
-  if (error) return <p>{error}</p>;
   if (data && data.me.success) {
     return (
       <div>
         <h1>Profile</h1>
-        <p>{data.me.user.username}</p>
-        <p>{data.me.user.email}</p>
+        <p>Username: {data.me.user.username}</p>
+        <p>Email: {data.me.user.email}</p>
       </div>
     );
   } else {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
-export default () => {
+export default ({ history }) => {
   const [formValues, setFormValues] = useState({
     username: '',
     password: ''
@@ -22,7 +22,7 @@ export default () => {
     }
   `;
 
-  const [login, { called, loading, data }] = useLazyQuery(LOGIN);
+  const [login, { client, data }] = useLazyQuery(LOGIN);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -33,17 +33,10 @@ export default () => {
     });
   };
 
-  if (called && loading) return <p>Loading ...</p>;
-
   if (data && data.login.success) {
     localStorage.setItem('token', data.login.token);
-    return (
-      <div>
-        <p>{data.login.user.username}</p>
-        <p>{data.login.user.email}</p>
-        <p>{data.login.token}</p>
-      </div>
-    );
+    client.resetStore();
+    history.push('/profile');
   } else if (data && !data.login.success) {
     return (
       <div>
@@ -51,6 +44,7 @@ export default () => {
       </div>
     );
   }
+
   return (
     <div>
       <h1>Login</h1>
