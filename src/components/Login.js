@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { AuthContext } from './App';
+
+const LOGIN = gql`
+  query Login($user: UserInput!) {
+    login(user: $user) {
+      success
+      message
+      user {
+        username
+        email
+      }
+      token
+    }
+  }
+`;
 
 export default ({ history }) => {
+  const { dispatch } = useContext(AuthContext);
+
   const [formValues, setFormValues] = useState({
     username: '',
     password: ''
   });
-
-  const LOGIN = gql`
-    query Login($user: UserInput!) {
-      login(user: $user) {
-        success
-        message
-        user {
-          username
-          email
-        }
-        token
-      }
-    }
-  `;
 
   const [login, { client, data }] = useLazyQuery(LOGIN);
 
@@ -33,16 +36,21 @@ export default ({ history }) => {
     });
   };
 
-  if (data && data.login.success) {
-    localStorage.setItem('token', data.login.token);
-    client.resetStore();
-    history.push('/profile');
-  } else if (data && !data.login.success) {
-    return (
-      <div>
-        <p>Message from server: {data.login.message}</p>
-      </div>
-    );
+  if (data) {
+    if (data.login.success) {
+      dispatch({
+        type: 'LOGIN',
+        payload: { user: data.login.user, token: data.login.token }
+      });
+      client.resetStore();
+      history.push('/profile');
+    } else {
+      return (
+        <div>
+          <p>Message from server: {data.login.message}</p>
+        </div>
+      );
+    }
   }
 
   return (

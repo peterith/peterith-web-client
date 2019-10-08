@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { withApollo } from '@apollo/react-hoc';
+import { AuthContext } from './App';
 
 export default withApollo(
   withRouter(({ client, history }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-      localStorage.getItem('token')
-        ? setIsLoggedIn(true)
-        : setIsLoggedIn(false);
-    });
+    const { state, dispatch } = useContext(AuthContext);
 
     const handleOnLogOut = event => {
       event.preventDefault();
-      localStorage.removeItem('token');
+      dispatch({ type: 'LOGOUT' });
       client.resetStore();
       history.push('/');
     };
 
-    return isLoggedIn ? (
+    return state.isAuthenticated ? (
       <div className="nav-user">
         <Link to="/profile" className="link">
           Profile
