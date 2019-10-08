@@ -46,8 +46,8 @@ export default () => {
           <strong>Human Languages:</strong> English, Thai
         </p>
         <p>
-          <strong>Other Interests:</strong> PC hardware, 3D printing, strength
-          training, singing
+          <strong>Other Interests:</strong> Computers, 3D printing, weight
+          training, singing, Asian food
         </p>
       </section>
     </>
