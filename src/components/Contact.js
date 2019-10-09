@@ -6,7 +6,7 @@ export default () => {
     <div>
       <h1>Contact</h1>
       <section className="contact">
-        <p>Let's keep in touch"</p>
+        <p>Let's keep in touch!</p>
         <a
           href="https://www.linkedin.com/in/peterith"
           target="_blank"

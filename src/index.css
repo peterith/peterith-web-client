@@ -27,4 +27,20 @@ h2 {
 input {
   font-size: 0.8em;
   margin: 5px 0;
+  border-radius: 5px;
+}
+
+.button {
+  transition-duration: 0.5s;
+  background-color: #f66;
+  border: 2px solid #f66;
+  color: white;
+  padding: 7px;
+  min-width: 70px;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #c55;
+  border-color: #c55;
 }
