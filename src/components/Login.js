@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { AuthContext } from './App';
+import MessageBox from './MessageBox';
 
 const LOGIN = gql`
   query Login($user: UserInput!) {
@@ -17,14 +18,15 @@ const LOGIN = gql`
   }
 `;
 
+const errorMessage = <MessageBox>Incorrect username or password!</MessageBox>;
+
 export default ({ history }) => {
   const { dispatch } = useContext(AuthContext);
-
   const [formValues, setFormValues] = useState({
     username: '',
     password: ''
   });
-
+  const [isInvalid, setIsInvalid] = useState(false);
   const [login, { client, data }] = useLazyQuery(LOGIN);
 
   const handleSubmit = event => {
@@ -36,22 +38,20 @@ export default ({ history }) => {
     });
   };
 
-  if (data) {
-    if (data.login.success) {
-      dispatch({
-        type: 'LOGIN',
-        payload: { user: data.login.user, token: data.login.token }
-      });
-      client.resetStore();
-      history.push('/profile');
-    } else {
-      return (
-        <div>
-          <p>Message from server: {data.login.message}</p>
-        </div>
-      );
+  useEffect(() => {
+    if (data) {
+      if (data.login.success) {
+        dispatch({
+          type: 'LOGIN',
+          payload: { user: data.login.user, token: data.login.token }
+        });
+        client.resetStore();
+        history.push('/profile');
+      } else {
+        setIsInvalid(true);
+      }
     }
-  }
+  }, [data, client, dispatch, history]);
 
   return (
     <div>
@@ -87,6 +87,7 @@ export default ({ history }) => {
         <br />
         <input type="submit" value="Login" className="button" />
       </form>
+      {isInvalid && errorMessage}
     </div>
   );
 };
