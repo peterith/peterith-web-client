@@ -11,16 +11,12 @@ import './App.css';
 
 export const AuthContext = createContext();
 
-const initialState = {
-  isAuthenticated: false,
-  token: null
-};
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       localStorage.setItem('token', action.payload.token);
+
       return {
         isAuthenticated: true,
         user: action.payload.user,
@@ -29,6 +25,7 @@ const reducer = (state, action) => {
     case 'LOGOUT':
       localStorage.removeItem('user');
       localStorage.removeItem('token');
+
       return {
         isAuthenticated: false,
         user: null,
@@ -40,7 +37,10 @@ const reducer = (state, action) => {
 };
 
 export default () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    isAuthenticated: false,
+    token: null
+  });
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>

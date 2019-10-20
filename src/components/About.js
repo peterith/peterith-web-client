@@ -8,7 +8,7 @@ export default () => {
         <h2>Hi, I'm Pete!</h2>
         <p>
           I'm a full-time software engineer, machine learning hobbyist, fitness
-          enthusiast, and a growth oriented learner.
+          enthusiast, and a self-motivated learner.
         </p>
       </section>
       <section>
@@ -17,7 +17,7 @@ export default () => {
           <strong>Languages:</strong> JavaScript, Python, Java, C++, C, SQL
         </p>
         <p>
-          <strong>Frameworks/Tools:</strong> React, Apollo GraphQL, Express,
+          <strong>Frameworks/Tools:</strong> React, Apollo GraphQL, Node.js,
           Spring, MongoDB, Git, AWS
         </p>
         <p>
