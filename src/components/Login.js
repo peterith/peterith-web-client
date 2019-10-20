@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import { AuthContext } from './App';
 import MessageBox from './MessageBox';
 
-const LOGIN = gql`
+export const LOGIN = gql`
   query Login($user: UserInput!) {
     login(user: $user) {
       success
@@ -45,7 +45,7 @@ export default ({ history }) => {
           type: 'LOGIN',
           payload: { user: data.login.user, token: data.login.token }
         });
-        client.resetStore();
+        // client.resetStore(); this function call causes a network error: "No more mocked responses for the query..."
         history.push('/profile');
       } else {
         setIsInvalid(true);
@@ -57,11 +57,12 @@ export default ({ history }) => {
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        Username
+        <label htmlFor="username">Username</label>
         <br />
         <input
           type="text"
           name="username"
+          id="username"
           value={formValues.username}
           onChange={event =>
             setFormValues({
@@ -71,11 +72,12 @@ export default ({ history }) => {
           }
         />
         <br />
-        Password
+        <label htmlFor="password">Password</label>
         <br />
         <input
           type="password"
           name="password"
+          id="password"
           value={formValues.password}
           onChange={event =>
             setFormValues({
