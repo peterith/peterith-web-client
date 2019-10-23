@@ -3,19 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/react-hoc": "^3.1.3",
-    "@apollo/react-hooks": "^3.1.3",
-    "apollo-cache-inmemory": "^1.6.3",
-    "apollo-client": "^2.6.4",
-    "apollo-link-context": "^1.0.19",
-    "apollo-link-http": "^1.5.16",
-    "graphql": "^14.5.8",
-    "graphql-tag": "^2.10.1",
-    "path": "^0.12.7",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.2.0"
+    "@apollo/react-hooks": "3.1.3",
+    "@emotion/core": "10.0.27",
+    "apollo-cache-inmemory": "1.6.5",
+    "apollo-client": "2.6.8",
+    "apollo-link-context": "1.0.19",
+    "apollo-link-http": "1.5.16",
+    "emotion-theming": "10.0.27",
+    "graphql": "14.6.0",
+    "graphql-tag": "2.10.3",
+    "prop-types": "15.7.2",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.4.0",
+    "uuid": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +27,10 @@
     "lint": "eslint ."
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "env": {
+      "browser": true
+    }
   },
   "browserslist": {
     "production": [
@@ -40,20 +45,19 @@
     ]
   },
   "devDependencies": {
-    "@apollo/react-testing": "^3.1.3",
-    "@testing-library/jest-dom": "^4.1.2",
-    "@testing-library/react": "^9.3.0",
-    "eslint": "^6.5.1",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-react": "^7.16.0",
-    "eslint-plugin-react-hooks": "^2.1.2",
-    "faker": "^4.1.0",
-    "prettier": "^1.18.2",
-    "react-test-renderer": "^16.10.2",
-    "waait": "^1.0.5"
+    "@apollo/react-testing": "3.1.3",
+    "@testing-library/jest-dom": "5.1.1",
+    "@testing-library/react": "9.4.1",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.18.3",
+    "eslint-plugin-react-hooks": "2.4.0",
+    "faker": "4.1.0",
+    "prettier": "1.19.1",
+    "react-test-renderer": "16.12.0",
+    "waait": "1.0.5"
   }
 }

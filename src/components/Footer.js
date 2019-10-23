@@ -1,10 +1,17 @@
-import React from 'react';
-import './Footer.css';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 
-export default () => {
+const Footer = () => {
+  const style = css`
+    text-align: center;
+    margin: 50px;
+  `;
+
   return (
-    <div className="copyright">
-      <span className="far fa-copyright" /> 2019 peterith
-    </div>
+    <footer css={style}>
+      <span className="far fa-copyright" /> 2020 peterith
+    </footer>
   );
 };
+
+export default Footer;
