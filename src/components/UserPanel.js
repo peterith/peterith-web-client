@@ -16,7 +16,7 @@ export default withApollo(
 
     return state.isAuthenticated ? (
       <div className="nav-user">
-        <Link to="/profile" className="link">
+        <Link to={`/@${state.username}`} className="link">
           Profile
         </Link>
         {' | '}
