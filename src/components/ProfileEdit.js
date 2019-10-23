@@ -4,7 +4,7 @@ import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { AuthContext } from './App';
 import Message from './Message';
 import MessageBox from './MessageBox';
-import { UPDATE_USER } from '../graphql/mutations';
+import { UPDATE_USER, DELETE_USER } from '../graphql/mutations';
 import {
   VALIDATE_USERNAME_AVAILABILITY,
   VALIDATE_EMAIL_AVAILABILITY
@@ -20,6 +20,7 @@ import {
 export default ({ setEditMode, refetch, user }) => {
   const history = useHistory();
   const { dispatch } = useContext(AuthContext);
+
   const [formValues, setFormValues] = useState({
     username: user.username,
     email: user.email,
@@ -38,7 +39,10 @@ export default ({ setEditMode, refetch, user }) => {
   });
   const [isInvalid, setIsInvalid] = useState(false);
 
-  const [updateUser, { data: updateUserData }] = useMutation(UPDATE_USER);
+  const [updateUser, { client, data: updateUserData }] = useMutation(
+    UPDATE_USER
+  );
+  const [deleteUser, { data: deleteUserData }] = useMutation(DELETE_USER);
   const [validateUsernameAvailability, { data: usernameData }] = useLazyQuery(
     VALIDATE_USERNAME_AVAILABILITY
   );
@@ -55,17 +59,34 @@ export default ({ setEditMode, refetch, user }) => {
           type: 'LOGIN',
           payload: {
             username: updateUserData.updateUser.username,
-            token: updateUserData.updateUser.token
+            token: updateUserData.updateUser.token,
+            client,
+            history
           }
         });
-        history.push(`/@${updateUserData.updateUser.username}`);
         refetch();
         setEditMode(false);
       }
 
       setIsInvalid(true);
     }
-  }, [updateUserData]);
+  }, [updateUserData, dispatch, client, history, refetch, setEditMode]);
+
+  useEffect(() => {
+    if (deleteUserData) {
+      if (deleteUserData.deleteUser.success) {
+        dispatch({
+          type: 'LOGOUT',
+          payload: {
+            client,
+            history
+          }
+        });
+      }
+
+      setIsInvalid(true);
+    }
+  }, [deleteUserData, dispatch, client, history]);
 
   useEffect(() => {
     if (usernameData) {
@@ -230,7 +251,9 @@ export default ({ setEditMode, refetch, user }) => {
     setEditMode(false);
   };
 
-  const handleDeactivate = () => {};
+  const handleDeactivate = () => {
+    deleteUser({ variables: { password: formValues.oldPassword } });
+  };
 
   return (
     <>
@@ -306,12 +329,12 @@ export default ({ setEditMode, refetch, user }) => {
           className="button button-red"
           onClick={handleCancel}
         />
-        {/* <input
+        <input
           type="button"
           value="Deactivate"
           className="button button-iris"
           onClick={handleDeactivate}
-        /> */}
+        />
       </form>
       {isInvalid && errorMessageBox}
     </>

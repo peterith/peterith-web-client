@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { AuthContext } from './App';
 import Message from './Message';
 import {
   VALIDATE_USERNAME_AVAILABILITY,
@@ -15,7 +17,10 @@ import {
 } from '../utils/validations';
 import './Register.css';
 
-export default ({ history }) => {
+export default () => {
+  const history = useHistory();
+  const { dispatch } = useContext(AuthContext);
+
   const [formValues, setFormValues] = useState({
     username: '',
     email: '',
@@ -32,13 +37,31 @@ export default ({ history }) => {
     password: messagesEnum.PASSWORD_INVALID
   });
 
-  const [registerUser] = useMutation(REGISTER_USER);
+  const [registerUser, { client, data: registerUserData }] = useMutation(
+    REGISTER_USER
+  );
   const [validateUsernameAvailability, { data: usernameData }] = useLazyQuery(
     VALIDATE_USERNAME_AVAILABILITY
   );
   const [validateEmailAvailability, { data: emailData }] = useLazyQuery(
     VALIDATE_EMAIL_AVAILABILITY
   );
+
+  useEffect(() => {
+    if (registerUserData) {
+      if (registerUserData.registerUser.success) {
+        dispatch({
+          type: 'LOGIN',
+          payload: {
+            username: registerUserData.registerUser.username,
+            token: registerUserData.registerUser.token,
+            client,
+            history
+          }
+        });
+      }
+    }
+  }, [registerUserData, dispatch, client, history]);
 
   useEffect(() => {
     if (usernameData) {
@@ -110,7 +133,6 @@ export default ({ history }) => {
           }
         }
       });
-      history.push('/login');
     }
   };
 

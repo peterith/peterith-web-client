@@ -8,11 +8,13 @@ import { LOGIN } from '../graphql/queries';
 export default () => {
   const history = useHistory();
   const { dispatch } = useContext(AuthContext);
+
   const [formValues, setFormValues] = useState({
     username: '',
     password: ''
   });
   const [isInvalid, setIsInvalid] = useState(false);
+
   const [login, { client, data }] = useLazyQuery(LOGIN);
 
   const errorMessageBox = (
@@ -41,11 +43,11 @@ export default () => {
           type: 'LOGIN',
           payload: {
             username: data.login.username,
-            token: data.login.token
+            token: data.login.token,
+            client,
+            history
           }
         });
-        // client.resetStore(); this function call causes a network error: "No more mocked responses for the query..."
-        history.push(`/@${data.login.username}`);
       } else {
         setIsInvalid(true);
       }

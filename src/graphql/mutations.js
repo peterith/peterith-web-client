@@ -5,6 +5,8 @@ export const REGISTER_USER = gql`
     registerUser(user: $user) {
       success
       message
+      username
+      token
     }
   }
 `;
@@ -21,8 +23,8 @@ export const UPDATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($username: String!) {
-    deleteUser(username: $username) {
+  mutation DeleteUser($password: String!) {
+    deleteUser(password: $password) {
       success
       message
     }
