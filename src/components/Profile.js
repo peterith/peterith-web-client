@@ -1,57 +1,56 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import ProfileEdit from './ProfileEdit';
 import { GET_USER } from '../graphql/queries';
+import Heading from './Heading';
 
-export default () => {
-  const [editMode, setEditMode] = useState(false);
+const Profile = () => {
   const { username } = useParams();
-  const { data, refetch } = useQuery(GET_USER, { variables: { username } });
+  const { data, loading, error } = useQuery(GET_USER, { variables: { username } });
 
-  const handleClick = () => {
-    setEditMode(true);
-  };
+  const container = css`
+    display: flex;
+    justify-content: center;
+  `;
 
-  if (editMode) {
-    return (
-      <div>
-        <h1>Profile</h1>
-        <ProfileEdit
-          setEditMode={setEditMode}
-          refetch={refetch}
-          user={data.getUser.user}
-        ></ProfileEdit>
-      </div>
-    );
+  const section = css`
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 30px;
+  `;
+
+  const heading = css`
+    margin-top: 0px;
+  `;
+
+  if (loading) {
+    return <p>Loading...</p>;
   }
 
-  if (data) {
-    if (data.getUser.success) {
-      return (
-        <div>
-          <h1>Profile</h1>
-          <table>
-            <tbody>
-              <tr>
-                <td>Username:</td>
-                <td>{data.getUser.user.username}</td>
-              </tr>
-              <tr>
-                <td>Email:</td>
-                <td>{data.getUser.user.email}</td>
-              </tr>
-            </tbody>
-          </table>
-          <button className="button button-red" onClick={handleClick}>
-            Edit
-          </button>
-        </div>
-      );
-    }
-
-    return <p>{data.getUser.message}</p>;
+  if (error) {
+    return <p>{`${error.graphQLErrors[0].message}`}</p>;
   }
 
-  return <p>Please login again.</p>;
+  return (
+    <div css={container}>
+      <section css={section}>
+        <Heading css={heading}>Profile</Heading>
+        <table>
+          <tbody>
+            <tr>
+              <td>Username:</td>
+              <td>{data.getUser.username}</td>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td>{data.getUser.email}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  );
 };
+
+export default Profile;
