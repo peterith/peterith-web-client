@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useTheme } from 'emotion-theming';
 import { useAuth, useModal, useToast } from '../hooks';
+import Nav from './Nav';
 
 const Header = () => {
   const history = useHistory();
@@ -11,28 +12,15 @@ const Header = () => {
   const { openAuthModal } = useModal();
   const { addSuccessToast } = useToast();
 
-  const headerStyle = css`
+  const header = css`
     display: flex;
-    padding-bottom: 20px;
+    align-items: center;
+    padding: 10px 20px;
     border-bottom: 2px solid;
     font-size: 1.5rem;
   `;
 
-  const titleStyle = css`
-    font-weight: bold;
-    font-size: 2.8rem;
-  `;
-
-  const linkStyle = css`
-    text-decoration: none;
-    color: ${colours.black};
-    &:hover {
-      color: ${colours.primary.main};
-      text-decoration: underline;
-    }
-  `;
-
-  const authStyle = css`
+  const user = css`
     margin-left: auto;
   `;
 
@@ -56,22 +44,42 @@ const Header = () => {
   };
 
   return (
-    <header css={headerStyle}>
-      <nav>
-        const <span css={titleStyle}>peterith</span> = {'{ '}
-        <Link to="/" css={linkStyle}>
-          about
-        </Link>
-        ,{' '}
-        <Link to="/contact" css={linkStyle}>
-          contact
-        </Link>
-        {' };'}
-      </nav>
-      <div css={authStyle}>
-        {!auth.token && <span css={iconStyle} className="fas fa-sign-in-alt" onClick={openAuthModal} />}
-        {auth.token && <span css={iconStyle} className="fas fa-user-alt" onClick={handleClickProfile} />}
-        {auth.token && <span css={iconStyle} className="fas fa-sign-out-alt" onClick={handleLogout} />}
+    <header css={header}>
+      <Nav />
+      <div css={user}>
+        {!auth.token && (
+          <span
+            css={iconStyle}
+            className="fas fa-sign-in-alt"
+            role="button"
+            aria-label="login/register"
+            tabIndex="0"
+            onKeyPress={openAuthModal}
+            onClick={openAuthModal}
+          />
+        )}
+        {auth.token && (
+          <span
+            css={iconStyle}
+            className="fas fa-user-alt"
+            role="button"
+            aria-label="open profile"
+            tabIndex="0"
+            onKeyPress={handleClickProfile}
+            onClick={handleClickProfile}
+          />
+        )}
+        {auth.token && (
+          <span
+            css={iconStyle}
+            className="fas fa-sign-out-alt"
+            role="button"
+            aria-label="logout"
+            tabIndex="0"
+            onKeyPress={handleLogout}
+            onClick={handleLogout}
+          />
+        )}
       </div>
     </header>
   );

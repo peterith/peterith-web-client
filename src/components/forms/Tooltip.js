@@ -8,12 +8,12 @@ const Tooltip = ({ children }) => {
   const { colours } = useTheme();
   const [isVisible, setVisible] = useState(false);
 
-  const tooltipStyle = css`
+  const tooltip = css`
     display: inline-block;
     position: relative;
   `;
 
-  const textStyle = css`
+  const text = css`
     visibility: hidden;
     min-width: 200px;
     padding: 5px;
@@ -29,7 +29,7 @@ const Tooltip = ({ children }) => {
     transition-duration: 0.5s;
   `;
 
-  const hiddenStyle = css`
+  const hidden = css`
     visibility: visible;
     opacity: 0.7;
   `;
@@ -43,9 +43,9 @@ const Tooltip = ({ children }) => {
   };
 
   return (
-    <div css={tooltipStyle}>
+    <div css={tooltip}>
       <span className="fas fa-info-circle" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
-      <div css={isVisible ? [textStyle, hiddenStyle] : textStyle}>{children}</div>
+      <div css={isVisible ? [text, hidden] : text}>{children}</div>
     </div>
   );
 };

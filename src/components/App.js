@@ -6,9 +6,11 @@ import Footer from './Footer';
 
 const App = () => {
   const style = css`
-    width: 960px;
+    width: 100%;
     margin: auto;
-    padding-top: 10px;
+    @media (min-width: 960px) {
+      width: 960px;
+    }
   `;
 
   return (
