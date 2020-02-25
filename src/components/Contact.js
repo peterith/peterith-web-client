@@ -2,7 +2,7 @@
 import { jsx, css } from '@emotion/core';
 import { useTheme } from 'emotion-theming';
 
-export default () => {
+const Contact = () => {
   const { colours } = useTheme();
 
   const section = css`
@@ -40,3 +40,5 @@ export default () => {
     </section>
   );
 };
+
+export default Contact;

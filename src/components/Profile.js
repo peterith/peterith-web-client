@@ -9,7 +9,7 @@ const Profile = () => {
   const { username } = useParams();
   const { data, loading, error } = useQuery(GET_USER, { variables: { username } });
 
-  const container = css`
+  const profile = css`
     display: flex;
     justify-content: center;
   `;
@@ -33,7 +33,7 @@ const Profile = () => {
   }
 
   return (
-    <div css={container}>
+    <div css={profile}>
       <section css={section}>
         <Heading css={heading}>Profile</Heading>
         <table>

@@ -7,7 +7,7 @@ import Profile from './Profile';
 
 const Main = () => {
   const style = css`
-    margin-top: 50px;
+    margin: 50px;
   `;
 
   return (

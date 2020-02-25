@@ -27,7 +27,7 @@ const Toast = ({ toastType, onClose, children }) => {
   }
 `;
 
-  const toastStyle = css`
+  const toast = css`
     display: flex;
     margin: 20px;
     border-radius: 10px;
@@ -36,7 +36,7 @@ const Toast = ({ toastType, onClose, children }) => {
     animation: ${slideLeft} 0.5s;
   `;
 
-  const bannerStyle = css`
+  const banner = css`
     background-color: ${colour};
     border-radius: 10px 0px 0px 10px;
     width: 80px;
@@ -46,18 +46,18 @@ const Toast = ({ toastType, onClose, children }) => {
     color: ${colours.white};
   `;
 
-  const textStyle = css`
+  const text = css`
     padding: 15px 20px;
     font-size: 0.9rem;
   `;
 
-  const titleStyle = css`
+  const heading = css`
     font-size: 1rem;
     font-weight: bold;
     line-height: 30px;
   `;
 
-  const closeButtonStyle = css`
+  const button = css`
     margin-left: auto;
     padding: 10px;
     color: ${colours.black};
@@ -65,16 +65,24 @@ const Toast = ({ toastType, onClose, children }) => {
   `;
 
   return (
-    <div css={toastStyle}>
-      <div css={bannerStyle}>
+    <div css={toast}>
+      <div css={banner}>
         <span className={symbol} />
       </div>
-      <div css={textStyle}>
-        <span css={titleStyle}>{title}</span>
+      <div css={text}>
+        <span css={heading}>{title}</span>
         <br />
         {children}
       </div>
-      <span css={closeButtonStyle} className="fas fa-times" onClick={onClose} />
+      <span
+        css={button}
+        className="fas fa-times"
+        role="button"
+        aria-label="close toast"
+        tabIndex="0"
+        onKeyPress={onClose}
+        onClick={onClose}
+      />
     </div>
   );
 };
