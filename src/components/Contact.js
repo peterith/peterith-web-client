@@ -14,6 +14,7 @@ const Contact = () => {
   `;
 
   const link = css`
+    display: inline-block;
     margin: 5px;
     padding: 7px;
     border: 2px solid;
