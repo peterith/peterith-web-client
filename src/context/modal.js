@@ -13,7 +13,7 @@ const ModalProvider = ({ children }) => {
 
   const style = css`
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.4);
     width: 100vw;
     height: 100vh;
   `;
@@ -38,7 +38,7 @@ const ModalProvider = ({ children }) => {
   return (
     <ModalContext.Provider value={{ openAuthModal, closeModal }}>
       {createPortal(options.isOpened && getModal(options.modalType), document.getElementById('modal-root'))}
-      <div css={options.isOpened && style} />
+      {options.isOpened && <div css={style} />}
       {children}
     </ModalContext.Provider>
   );

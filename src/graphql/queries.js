@@ -1,10 +1,21 @@
 import gql from 'graphql-tag';
 
-export const LOGIN = gql`
-  query Login($user: UserInput!) {
-    login(user: $user) {
-      token
-      username
+export const GET_ABOUT_STORY = gql`
+  query GetAboutStory {
+    getAboutStory {
+      title
+      description
+      sections {
+        id
+        title
+        contents {
+          id
+          title
+          text
+          order
+        }
+        order
+      }
     }
   }
 `;
@@ -12,14 +23,19 @@ export const LOGIN = gql`
 export const GET_USER = gql`
   query GetUser($username: String!) {
     getUser(username: $username) {
-      token
       firstName
       lastName
       username
       email
-      role
-      createdAt
-      updatedAt
+    }
+  }
+`;
+
+export const LOGIN = gql`
+  query Login($user: UserInput!) {
+    login(user: $user) {
+      token
+      username
     }
   }
 `;

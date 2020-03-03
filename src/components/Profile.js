@@ -35,7 +35,9 @@ const Profile = () => {
   return (
     <div css={profile}>
       <section css={section}>
-        <Heading css={heading}>Profile</Heading>
+        <Heading headingLevel={2} css={heading}>
+          Profile
+        </Heading>
         <table>
           <tbody>
             <tr>

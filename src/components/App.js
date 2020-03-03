@@ -7,9 +7,14 @@ import Footer from './Footer';
 const App = () => {
   const style = css`
     width: 100%;
-    margin: auto;
+    padding: 150px 50px 50px 50px;
+    box-sizing: border-box;
+    @media (min-width: 960px) {
+      padding-top: 200px;
+    }
     @media (min-width: 960px) {
       width: 960px;
+      margin: auto;
     }
   `;
 

@@ -1,51 +1,65 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
+import { useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { useTheme } from 'emotion-theming';
+// import { useToggle } from '../hooks';
+import { GET_ABOUT_STORY } from '../graphql/queries';
 import Heading from './Heading';
 
 const About = () => {
+  const { colours } = useTheme();
+  const [isEditable, setIsEditable] = useState(false);
+  // const [isEditing, toggleEditing] = useToggle(false);
+  const [story, setStory] = useState({ sections: [] });
+  const { loading, error } = useQuery(GET_ABOUT_STORY, {
+    onCompleted: ({ getAboutStory }) => {
+      setIsEditable(true);
+      setStory(getAboutStory);
+    },
+  });
+  const icon = css`
+    display: none;
+    float: right;
+    cursor: pointer;
+    &:hover {
+      color: ${colours.primary.main};
+    }
+  `;
+
+  const storySection = css`
+    margin: 40px auto;
+  `;
+
+  if (error) {
+    return <p>{`${error.graphQLErrors[0].message}`}</p>;
+  }
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div>
+      {isEditable && <span css={icon} className="fas fa-edit" />}
       <section>
-        <Heading>Hi, I&apos;m Pete!</Heading>
-        <p>
-          I&apos;m a full-time software engineer, machine learning hobbyist, fitness enthusiast, and a self-motivated
-          learner.
-        </p>
+        <Heading headingLevel={1}>{story.title}</Heading>
+        <p>{story.description}</p>
       </section>
-      <section>
-        <Heading>Software Engineering</Heading>
-        <p>
-          <strong>Languages:</strong> JavaScript, Python, Java, C++, C, SQL
-        </p>
-        <p>
-          <strong>Frameworks/Tools:</strong> React, Apollo GraphQL, Node.js, Spring, MongoDB, Git, AWS
-        </p>
-        <p>
-          <strong>Interests:</strong> Web Development, Internet of Things, Embedded Systems, GPU programming
-        </p>
-      </section>
-      <section>
-        <Heading>Machine Learning</Heading>
-        <p>
-          <strong>Interests:</strong> Computer Vision, Object Detection, Face Recognition, Recurrent Neural Network
-        </p>
-        <p>
-          <strong>Frameworks/Tools:</strong> Tensorflow, Keras, scikit-learn, MATLAB
-        </p>
-      </section>
-      <section>
-        <Heading>There&apos;s more to me!</Heading>
-        <p>
-          <strong>Qualifications:</strong> MEng (Hons) Biomedical Engineering @ Imperial College London (1st Class
-          Honours)
-        </p>
-        <p>
-          <strong>Human Languages:</strong> English, Thai
-        </p>
-        <p>
-          <strong>Other Interests:</strong> Computers, 3D printing, weight training, singing, Asian food
-        </p>
-      </section>
+      {story.sections.map((section) => {
+        return (
+          <section css={storySection} key={section.id}>
+            <Heading headingLevel={2}>{section.title}</Heading>
+            {section.contents.map((content) => {
+              return (
+                <p key={content.id}>
+                  <strong>{content.title}:</strong> {content.text}
+                </p>
+              );
+            })}
+          </section>
+        );
+      })}
     </div>
   );
 };

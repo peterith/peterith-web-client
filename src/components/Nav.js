@@ -9,7 +9,8 @@ const Nav = () => {
 
   const fullNav = css`
     display: none;
-    @media (min-width: 750px) {
+    letter-spacing: 3px;
+    @media (min-width: 850px) {
       display: block;
     }
   `;
@@ -21,10 +22,9 @@ const Nav = () => {
 
   const link = css`
     text-decoration: none;
-    color: ${colours.black};
+    color: ${colours.text};
     &:hover {
       color: ${colours.primary.main};
-      text-decoration: underline;
     }
   `;
 

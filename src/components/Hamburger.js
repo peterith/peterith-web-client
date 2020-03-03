@@ -10,7 +10,8 @@ const Hamburger = () => {
 
   const hamburger = css`
     display: flex;
-    @media (min-width: 750px) {
+    padding: 8px;
+    @media (min-width: 850px) {
       display: none;
     }
   `;

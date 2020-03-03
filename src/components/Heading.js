@@ -4,22 +4,36 @@ import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { ColourTypeEnum } from '../utils/enums';
 
-const Heading = ({ colourType, children, className }) => {
+const getFontSize = (headingLevel) => {
+  switch (headingLevel) {
+    case 1:
+      return '2rem';
+    case 2:
+      return '1.5rem';
+    default:
+      return '1rem';
+  }
+};
+
+const Heading = ({ headingLevel, colourType, children, className }) => {
   const { colours } = useTheme();
 
   const style = css`
-    font-size: 1.3rem;
+    font-size: ${getFontSize(headingLevel)};
     color: ${colours[colourType].main};
   `;
 
+  const Tag = `h${headingLevel}`;
+
   return (
-    <h1 css={style} className={className}>
+    <Tag css={style} className={className}>
       {children}
-    </h1>
+    </Tag>
   );
 };
 
 Heading.propTypes = {
+  headingLevel: PropTypes.number.isRequired,
   colourType: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.string.isRequired,

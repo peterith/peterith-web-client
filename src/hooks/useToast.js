@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { ToastContext } from '../context';
 
-export default () => {
+const useToast = () => {
   return useContext(ToastContext);
 };
+
+export default useToast;
