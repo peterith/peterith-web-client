@@ -46,7 +46,7 @@ const LoginForm = () => {
 
   return (
     <form css={style} onSubmit={handleSubmit}>
-      <Heading>Login</Heading>
+      <Heading headingLevel={2}>Login</Heading>
       <Input
         type={InputTypeEnum.TEXT}
         label="Username"

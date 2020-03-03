@@ -19,7 +19,7 @@ const Contact = () => {
     padding: 7px;
     border: 2px solid;
     border-radius: 500px;
-    color: ${colours.black};
+    color: ${colours.text};
     text-decoration: none;
     &:hover {
       color: ${colours.primary.main};
@@ -34,6 +34,12 @@ const Contact = () => {
       </a>
       <a css={link} href="https://www.github.com/peterith" target="_blank" rel="noopener noreferrer">
         <span className="fab fa-github" /> GitHub
+      </a>
+      <a css={link} href="https://www.instagram.com/peterith" target="_blank" rel="noopener noreferrer">
+        <span className="fab fa-instagram" /> Instagram
+      </a>
+      <a css={link} href="https://www.facebook.com/lsimplel" target="_blank" rel="noopener noreferrer">
+        <span className="fab fa-facebook" /> Facebook
       </a>
       <a css={link} href="mailto:p.rithisith@hotmail.com" target="_blank" rel="noopener noreferrer">
         <span className="fas fa-envelope" /> Email

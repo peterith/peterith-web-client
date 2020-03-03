@@ -26,17 +26,16 @@ const Modal = ({ children }) => {
   const modal = css`
     padding: 30px;
     border-radius: 10px;
-    background-color: white;
+    background-color: ${colours.background};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     position: fixed;
-
     animation: ${slideUp} 0.5s forwards;
   `;
 
   const button = css`
     font-size: 1.3rem;
     float: right;
-    color: ${colours.black};
+    color: ${colours.text};
     cursor: pointer;
   `;
 
@@ -59,4 +58,5 @@ const Modal = ({ children }) => {
 Modal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.element]).isRequired,
 };
+
 export default Modal;

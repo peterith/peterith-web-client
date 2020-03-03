@@ -59,7 +59,7 @@ const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading>Register</Heading>
+      <Heading headingLevel={2}>Register</Heading>
       <Input
         type={InputTypeEnum.TEXT}
         label="Username"

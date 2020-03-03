@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import { useTheme } from 'emotion-theming';
 import Tooltip from './Tooltip';
@@ -9,7 +9,7 @@ const Input = ({ type, label, description, isRequired, name, onChange, value }) 
   const { colours } = useTheme();
 
   const input = css`
-    margin: 5px 0px;
+    margin: 10px 0px;
     border-radius: 5px;
     padding: 3px;
     width: 300px;

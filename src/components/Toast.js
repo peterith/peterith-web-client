@@ -31,7 +31,7 @@ const Toast = ({ toastType, onClose, children }) => {
     display: flex;
     margin: 20px;
     border-radius: 10px;
-    background-color: ${colours.white};
+    background-color: ${colours.background};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     animation: ${slideLeft} 0.5s;
   `;
@@ -43,7 +43,7 @@ const Toast = ({ toastType, onClose, children }) => {
     text-align: center;
     font-size: 2rem;
     line-height: 80px;
-    color: ${colours.white};
+    color: ${colours.text};
   `;
 
   const text = css`

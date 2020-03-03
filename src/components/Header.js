@@ -1,35 +1,52 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useHistory } from 'react-router-dom';
-import { useTheme } from 'emotion-theming';
-import { useAuth, useModal, useToast } from '../hooks';
+import { useTheme as useEmotionTheme } from 'emotion-theming';
+import { useAuth, useTheme, useModal, useToast } from '../hooks';
 import Nav from './Nav';
 
 const Header = () => {
   const history = useHistory();
-  const { colours } = useTheme();
+  const { colours } = useEmotionTheme();
   const { auth, logout } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const { openAuthModal } = useModal();
   const { addSuccessToast } = useToast();
 
   const header = css`
+    padding: 20px;
+    background-color: ${colours.background};
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
+    font-size: 1.5rem;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    border-bottom: 2px solid;
-    font-size: 1.5rem;
+    z-index: 100;
+    opacity: 1;
   `;
 
-  const user = css`
+  const icons = css`
     margin-left: auto;
   `;
 
-  const iconStyle = css`
-    font-size: 1.2rem;
-    padding: 5px;
+  const icon = css`
+    font-size: 1.3rem;
+    padding: 8px;
     &:hover {
       cursor: pointer;
       color: ${colours.primary.main};
+    }
+  `;
+
+  const rotate = css`
+    transition: transform 0.3s;
+    &:hover {
+      color: ${colours.primary.main};
+      transform: rotate(-70deg);
     }
   `;
 
@@ -46,10 +63,10 @@ const Header = () => {
   return (
     <header css={header}>
       <Nav />
-      <div css={user}>
+      <div css={icons}>
         {!auth.token && (
           <span
-            css={iconStyle}
+            css={icon}
             className="fas fa-sign-in-alt"
             role="button"
             aria-label="login/register"
@@ -60,7 +77,7 @@ const Header = () => {
         )}
         {auth.token && (
           <span
-            css={iconStyle}
+            css={icon}
             className="fas fa-user-alt"
             role="button"
             aria-label="open profile"
@@ -71,7 +88,7 @@ const Header = () => {
         )}
         {auth.token && (
           <span
-            css={iconStyle}
+            css={icon}
             className="fas fa-sign-out-alt"
             role="button"
             aria-label="logout"
@@ -80,6 +97,15 @@ const Header = () => {
             onClick={handleLogout}
           />
         )}
+        <span
+          css={[icon, rotate]}
+          className={isDarkMode ? 'fas fa-sun' : 'fas fa-moon'}
+          role="button"
+          aria-label="toggle dark mode"
+          tabIndex="0"
+          onKeyPress={toggleDarkMode}
+          onClick={toggleDarkMode}
+        />
       </div>
     </header>
   );

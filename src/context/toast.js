@@ -2,7 +2,7 @@
 import { jsx, css } from '@emotion/core';
 import { createContext, useState } from 'react';
 import { createPortal } from 'react-dom';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Toast from '../components/Toast';
 import { ToastTypeEnum } from '../utils/enums';
@@ -13,7 +13,7 @@ const ToastProvider = ({ children }) => {
   const style = css`
     position: fixed;
     right: 20px;
-    top: 20px;
+    top: 100px;
     width: 450px;
   `;
 

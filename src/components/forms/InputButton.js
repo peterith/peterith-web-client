@@ -18,7 +18,7 @@ const InputButton = ({ colourType, value }) => {
     font-weight: bold;
     cursor: pointer;
     background-color: ${colours[colourType].main};
-    border: 2px solid;
+    border: 0px;
     &:hover {
       background-color: ${colours[colourType].light};
     }
