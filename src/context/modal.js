@@ -44,6 +44,6 @@ const ModalProvider = ({ children }) => {
   );
 };
 
-ModalProvider.propTypes = { children: PropTypes.arrayOf(PropTypes.element).isRequired };
+ModalProvider.propTypes = { children: PropTypes.element.isRequired };
 
 export { ModalContext, ModalProvider };
