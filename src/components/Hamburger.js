@@ -47,7 +47,7 @@ const Hamburger = () => {
   `;
 
   const handleBlur = (event) => {
-    if (!event.relatedTarget || !event.relatedTarget.className.includes('Hamburger')) {
+    if (!event.relatedTarget || !event.relatedTarget.classList.contains('hamburger-link')) {
       toggleNavOpened();
     }
   };
@@ -66,10 +66,10 @@ const Hamburger = () => {
       />
       {isNavOpened && (
         <div css={links}>
-          <Link to="/" css={link} onClick={toggleNavOpened}>
+          <Link to="/" css={link} className="hamburger-link" onClick={toggleNavOpened}>
             about
           </Link>
-          <Link to="/contact" css={link} onClick={toggleNavOpened}>
+          <Link to="/contact" css={link} className="hamburger-link" onClick={toggleNavOpened}>
             contact
           </Link>
         </div>
