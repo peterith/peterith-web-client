@@ -44,9 +44,11 @@ const Header = () => {
 
   const rotate = css`
     transition: transform 0.3s;
-    &:hover {
-      color: ${colours.primary.main};
-      transform: rotate(-70deg);
+    @media (hover: hover) {
+      &:hover {
+        color: ${colours.primary.main};
+        transform: rotate(-70deg);
+      }
     }
   `;
 

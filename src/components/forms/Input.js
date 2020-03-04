@@ -13,6 +13,7 @@ const Input = ({ type, label, description, isRequired, name, onChange, value }) 
     border-radius: 5px;
     padding: 3px;
     width: 300px;
+    max-width: 50vw;
   `;
 
   const red = css`

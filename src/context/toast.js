@@ -15,6 +15,7 @@ const ToastProvider = ({ children }) => {
     right: 20px;
     top: 100px;
     width: 450px;
+    max-width: 80%;
   `;
 
   const [toasts, setToasts] = useState([]);

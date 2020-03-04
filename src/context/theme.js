@@ -46,6 +46,9 @@ const ThemeProvider = ({ children }) => {
     p {
       line-height: 1.5rem;
     }
+    span {
+      outline: none;
+    }
   `;
 
   return (

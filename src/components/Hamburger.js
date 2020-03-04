@@ -19,9 +19,12 @@ const Hamburger = () => {
   const icon = css`
     cursor: pointer;
     transition: transform 0.3s;
-    &:hover {
-      color: ${colours.primary.main};
-      transform: rotate(90deg);
+    transform: ${isNavOpened && 'rotate(90deg)'};
+    color: ${isNavOpened && colours.primary.main};
+    @media (hover: hover) {
+      &:hover {
+        color: ${colours.primary.main};
+      }
     }
   `;
 
@@ -53,6 +56,7 @@ const Hamburger = () => {
         tabIndex="0"
         onKeyPress={toggleNavOpened}
         onClick={toggleNavOpened}
+        onBlur={toggleNavOpened}
       />
       {isNavOpened && (
         <div css={links}>
