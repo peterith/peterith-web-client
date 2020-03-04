@@ -46,6 +46,12 @@ const Hamburger = () => {
     }
   `;
 
+  const handleBlur = (event) => {
+    if (!event.relatedTarget || !event.relatedTarget.className.includes('Hamburger')) {
+      toggleNavOpened();
+    }
+  };
+
   return (
     <div css={hamburger}>
       <span
@@ -56,14 +62,14 @@ const Hamburger = () => {
         tabIndex="0"
         onKeyPress={toggleNavOpened}
         onClick={toggleNavOpened}
-        onBlur={toggleNavOpened}
+        onBlur={handleBlur}
       />
       {isNavOpened && (
         <div css={links}>
-          <Link to="/" css={link}>
+          <Link to="/" css={link} onClick={toggleNavOpened}>
             about
           </Link>
-          <Link to="/contact" css={link}>
+          <Link to="/contact" css={link} onClick={toggleNavOpened}>
             contact
           </Link>
         </div>
