@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from 'emotion-theming';
 import { useToggle } from '../hooks';
@@ -7,6 +8,16 @@ import { useToggle } from '../hooks';
 const Hamburger = () => {
   const { colours } = useTheme();
   const [isNavOpened, toggleNavOpened] = useToggle(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (isNavOpened) {
+      document.addEventListener('mousedown', handleClickOutside, false);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside, false);
+    };
+  }, [isNavOpened]);
 
   const hamburger = css`
     display: flex;
@@ -30,7 +41,7 @@ const Hamburger = () => {
 
   const links = css`
     position: absolute;
-    left: 50px;
+    top: 55px;
     background-color: ${colours.black};
     text-align: center;
   `;
@@ -46,14 +57,14 @@ const Hamburger = () => {
     }
   `;
 
-  const handleBlur = (event) => {
-    if (!event.relatedTarget || !event.relatedTarget.classList.contains('hamburger-link')) {
+  const handleClickOutside = (event) => {
+    if (!ref.current.contains(event.target)) {
       toggleNavOpened();
     }
   };
 
   return (
-    <div css={hamburger}>
+    <div css={hamburger} ref={ref}>
       <span
         css={icon}
         className="fas fa-bars"
@@ -62,14 +73,13 @@ const Hamburger = () => {
         tabIndex="0"
         onKeyPress={toggleNavOpened}
         onClick={toggleNavOpened}
-        onBlur={handleBlur}
       />
       {isNavOpened && (
         <div css={links}>
-          <Link to="/" css={link} className="hamburger-link" onClick={toggleNavOpened}>
+          <Link to="/" css={link} onClick={toggleNavOpened}>
             about
           </Link>
-          <Link to="/contact" css={link} className="hamburger-link" onClick={toggleNavOpened}>
+          <Link to="/contact" css={link} onClick={toggleNavOpened}>
             contact
           </Link>
         </div>
