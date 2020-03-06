@@ -21,6 +21,7 @@ const Contact = () => {
     border-radius: 500px;
     color: ${colours.text};
     text-decoration: none;
+    transition: color 0.3s;
     &:hover {
       color: ${colours.primary.main};
     }

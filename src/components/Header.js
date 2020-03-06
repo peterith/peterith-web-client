@@ -36,6 +36,7 @@ const Header = () => {
   const icon = css`
     font-size: 1.3rem;
     padding: 8px;
+    transition: color 0.3s;
     &:hover {
       cursor: pointer;
       color: ${colours.primary.main};

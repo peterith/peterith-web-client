@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from 'emotion-theming';
 import Hamburger from './Hamburger';
 
 const Nav = () => {
   const { colours } = useTheme();
+  const { pathname } = useLocation();
 
   const fullNav = css`
     display: none;
@@ -16,16 +17,26 @@ const Nav = () => {
   `;
 
   const title = css`
-    font-weight: bold;
-    font-size: 2.8rem;
+    font-size: 3rem;
+    letter-spacing: 2px;
   `;
 
   const link = css`
     text-decoration: none;
     color: ${colours.text};
+    letter-spacing: 2px;
+    font-weight: bold;
+    transition: color 0.3s;
+  `;
+
+  const hover = css`
     &:hover {
-      color: ${colours.primary.main};
+      color: ${colours.primary.light};
     }
+  `;
+
+  const selected = css`
+    color: ${colours.primary.main};
   `;
 
   return (
@@ -33,11 +44,11 @@ const Nav = () => {
       <Hamburger />
       <div css={fullNav}>
         const <span css={title}>peterith</span> = {'{ '}
-        <Link to="/" css={link}>
+        <Link to="/" css={pathname === '/' ? [link, selected] : [link, hover]}>
           about
         </Link>
         ,{' '}
-        <Link to="/contact" css={link}>
+        <Link to="/contact" css={pathname === '/contact' ? [link, selected] : [link, hover]}>
           contact
         </Link>
         {' };'}
