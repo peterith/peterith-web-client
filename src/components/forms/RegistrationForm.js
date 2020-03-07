@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useAuth, useModal, useToast } from '../../hooks';
 import { REGISTER_USER } from '../../graphql/mutations';
-import { validateUsername, validateEmail, validatePassword } from '../../utils/validations';
+import { validateUsername, validateEmail, validatePassword } from '../../utils/validation';
 import Heading from '../Heading';
 import Input from './Input';
 import { InputTypeEnum } from '../../utils/enums';

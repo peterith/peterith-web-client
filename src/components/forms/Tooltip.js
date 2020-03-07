@@ -44,14 +44,17 @@ const Tooltip = ({ children }) => {
 
   return (
     <div css={tooltip}>
-      <span className="fas fa-info-circle" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+      <span
+        data-testid="tooltip"
+        className="fas fa-info-circle"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
       <div css={isVisible ? [text, hidden] : text}>{children}</div>
     </div>
   );
 };
 
-Tooltip.propTypes = {
-  children: PropTypes.string.isRequired,
-};
+Tooltip.propTypes = { children: PropTypes.string.isRequired };
 
 export default Tooltip;

@@ -42,9 +42,6 @@ Input.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-Input.defaultProps = {
-  description: null,
-  isRequired: false,
-};
+Input.defaultProps = { description: null, isRequired: false };
 
 export default Input;

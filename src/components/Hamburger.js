@@ -11,13 +11,19 @@ const Hamburger = () => {
   const ref = useRef(null);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref.current.contains(event.target)) {
+        toggleNavOpened();
+      }
+    };
+
     if (isNavOpened) {
       document.addEventListener('mousedown', handleClickOutside, false);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside, false);
     };
-  }, [isNavOpened]);
+  }, [isNavOpened, toggleNavOpened]);
 
   const hamburger = css`
     display: flex;
@@ -56,12 +62,6 @@ const Hamburger = () => {
       background-color: ${colours.secondary.light};
     }
   `;
-
-  const handleClickOutside = (event) => {
-    if (!ref.current.contains(event.target)) {
-      toggleNavOpened();
-    }
-  };
 
   return (
     <div css={hamburger} ref={ref}>
