@@ -13,7 +13,7 @@ const ThemeProvider = ({ children }) => {
   const darkMode = {
     colours: {
       primary: { main: '#f25e5e', dark: '#d73e3e', light: '#f0a0a2' },
-      secondary: { main: '#4d5389', light: '#6b73a1' },
+      secondary: { main: '#4d5389', dark: '#3d4070', light: '#858cb1' },
       success: '#4fb',
       black: '#313147',
       white: '#fff',
@@ -25,7 +25,7 @@ const ThemeProvider = ({ children }) => {
   const lightMode = {
     colours: {
       primary: { main: '#f25e5e', dark: '#d73e3e', light: '#f0a0a2' },
-      secondary: { main: '#4d5389', light: '#6b73a1' },
+      secondary: { main: '#4d5389', dark: '#3d4070', light: '#858cb1' },
       success: '#4fb',
       black: '#313147',
       white: '#fff',

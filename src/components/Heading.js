@@ -10,6 +10,8 @@ const getFontSize = (headingLevel) => {
       return '2rem';
     case 2:
       return '1.5rem';
+    case 3:
+      return '1.2rem';
     default:
       return '1rem';
   }

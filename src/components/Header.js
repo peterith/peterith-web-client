@@ -37,8 +37,8 @@ const Header = () => {
     font-size: 1.3rem;
     padding: 8px;
     transition: color 0.3s;
+    cursor: pointer;
     &:hover {
-      cursor: pointer;
       color: ${colours.primary.main};
     }
   `;

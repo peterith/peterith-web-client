@@ -43,7 +43,7 @@ const Toast = ({ toastType, onClose, children }) => {
     text-align: center;
     font-size: 2rem;
     line-height: 80px;
-    color: ${colours.text};
+    color: ${colours.white};
   `;
 
   const text = css`
