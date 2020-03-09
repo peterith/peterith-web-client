@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import UserInfo from './UserInfo';
-import Calander from './Calander';
+import Calander from './calendar';
 
 const Profile = () => {
   const style = css`
