@@ -42,6 +42,7 @@ const ThemeProvider = ({ children }) => {
       color: ${isDarkMode ? darkMode.colours.text : lightMode.colours.text};
       margin: 0px;
       transition: background-color 0.3s;
+      user-select: none;
     }
     p {
       line-height: 1.5rem;

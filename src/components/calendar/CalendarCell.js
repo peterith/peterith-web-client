@@ -3,14 +3,17 @@ import { jsx, css } from '@emotion/core';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 
-const CalendarCell = ({ year, month, date, isSelected, isGreyed, onClick }) => {
+const CalendarCell = ({ year, month, date, isSelected, isGreyed, isToday, onClick }) => {
   const { colours } = useTheme();
 
   const cell = css`
     box-sizing: border-box;
     height: 80px;
     padding: 5px;
-    box-shadow: 0 0 0 1px;
+    background-color: ${colours.white};
+    color: ${colours.black};
+    box-shadow: 0px 0px 0px 1px ${colours.secondary.main};
+    text-align: left;
   `;
 
   const greyed = css`
@@ -21,17 +24,22 @@ const CalendarCell = ({ year, month, date, isSelected, isGreyed, onClick }) => {
     background-color: ${colours.secondary.light};
   `;
 
+  const circle = css`
+    border: 1px solid ${colours.primary.main};
+    border-radius: 100%;
+    padding: 3px;
+  `;
+
   return (
     <div
       css={isGreyed ? [cell, greyed] : isSelected ? [cell, selected] : cell}
-      data-date={`${year}-${month}-${date}`}
-      role="button"
+      role="gridcell"
       aria-label="select date"
       tabIndex={0}
       onKeyPress={onClick(year, month, date)}
       onClick={onClick(year, month, date)}
     >
-      {date}
+      <span css={isToday && circle}>{date}</span>
     </div>
   );
 };
@@ -42,6 +50,7 @@ CalendarCell.propTypes = {
   date: PropTypes.number.isRequired,
   isSelected: PropTypes.bool,
   isGreyed: PropTypes.bool,
+  isToday: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
