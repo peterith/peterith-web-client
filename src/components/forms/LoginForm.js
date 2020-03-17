@@ -13,10 +13,12 @@ const LoginForm = () => {
   const { login } = useAuth();
   const { closeModal } = useModal();
   const { addSuccessToast, addErrorToast } = useToast();
-  const [formValues, setFormValues] = useState({ username: '', password: '' });
+  const [formValues, setFormValues] = useState({
+    username: '',
+    password: '',
+  });
 
   // variables are passed at the query function due to apollo client bug, move variables back here when bug is fixed
-  // also, two identical network calls are made for some reason, this needs fixing
   const [loginQuery] = useLazyQuery(LOGIN, {
     onCompleted: ({ login: { username, token } }) => {
       closeModal();
@@ -35,13 +37,18 @@ const LoginForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    loginQuery({ variables: { user: { ...formValues } } });
+    loginQuery({
+      variables: {
+        user: formValues,
+      },
+    });
   };
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFormValues((prevFormValues) => {
-      return { ...prevFormValues, [name]: value };
-    });
+  const handleChange = (name) => ({ target: { value } }) => {
+    setFormValues((previousFormValues) => ({
+      ...previousFormValues,
+      [name]: value,
+    }));
   };
 
   return (
@@ -50,15 +57,13 @@ const LoginForm = () => {
       <Input
         type={InputTypeEnum.TEXT}
         label="Username"
-        name="username"
-        onChange={handleChange}
+        onChange={handleChange('username')}
         value={formValues.username}
       />
       <Input
         type={InputTypeEnum.PASSWORD}
         label="Password"
-        name="password"
-        onChange={handleChange}
+        onChange={handleChange('password')}
         value={formValues.password}
       />
       <InputButton value="Login" />

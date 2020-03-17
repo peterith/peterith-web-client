@@ -2,10 +2,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import { ThemeProvider } from '../context';
+import { DarkModeProvider } from '../context';
 
 const wrapper = ({ children }) => {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return <DarkModeProvider>{children}</DarkModeProvider>;
 };
 
 wrapper.propTypes = {

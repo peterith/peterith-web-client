@@ -4,35 +4,52 @@ import React from 'react';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 
-const CalendarHeader = ({ year, month, onToggleMonthLeft, onToggleMonthRight }) => {
+const CalendarHeader = ({ year, month, onToggleToday, onAddEvent, onToggleMonthLeft, onToggleMonthRight }) => {
   const { colours } = useTheme();
 
+  const headerColour = css`
+    background-color: ${colours.secondary.dark};
+    color: ${colours.white};
+  `;
+
+  const todayContainer = css`
+    grid-column: span 2;
+    border-top-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+  `;
+
+  const today = css`
+    margin-left: 10px;
+  `;
   const yearStyle = css`
-    grid-column: span 7;
+    grid-column: span 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px 10px 0px 0px;
     font-size: 1.2rem;
-    background-color: ${colours.secondary.dark};
-    color: ${colours.white};
-    box-shadow: 0px 0px 0px 1px ${colours.secondary.dark};
+  `;
+
+  const addIconContainer = css`
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 10px;
+  `;
+
+  const addIcon = css`
+    margin: 0px 10px 0px auto;
   `;
 
   const monthStyle = css`
     grid-column: span 3;
-    background-color: ${colours.secondary.dark};
-    color: ${colours.white};
-    box-shadow: 0px 0px 0px 1px ${colours.secondary.dark};
   `;
 
   const icon = css`
     display: flex;
     align-items: flex-start;
     grid-column: span 2;
-    background-color: ${colours.secondary.dark};
-    color: ${colours.white};
-    box-shadow: 0px 0px 0px 1px ${colours.secondary.dark};
   `;
 
   const hover = css`
@@ -53,13 +70,35 @@ const CalendarHeader = ({ year, month, onToggleMonthLeft, onToggleMonthRight }) 
     justify-content: center;
     background-color: ${colours.secondary.main};
     color: ${colours.white};
-    box-shadow: 0px 0px 0px 1px ${colours.secondary.main};
   `;
 
   return (
     <React.Fragment>
-      <div css={yearStyle}>{year}</div>
-      <div css={icon}>
+      <div css={[todayContainer, headerColour]}>
+        <span
+          css={[today, hover]}
+          role="button"
+          aria-label="toggle today"
+          tabIndex="0"
+          onKeyPress={onToggleToday}
+          onClick={onToggleToday}
+        >
+          TODAY
+        </span>
+      </div>
+      <div css={[yearStyle, headerColour]}>{year}</div>
+      <div css={[addIconContainer, headerColour]}>
+        <span
+          css={[addIcon, hover]}
+          className="fas fa-plus"
+          role="button"
+          aria-label="add event"
+          tabIndex="0"
+          onKeyPress={onAddEvent}
+          onClick={onAddEvent}
+        />
+      </div>
+      <div css={[icon, headerColour]}>
         <span
           css={[hover, left]}
           className="fas fa-chevron-left"
@@ -70,7 +109,7 @@ const CalendarHeader = ({ year, month, onToggleMonthLeft, onToggleMonthRight }) 
           onClick={onToggleMonthLeft}
         />
       </div>
-      <span css={monthStyle}>
+      <span css={[monthStyle, headerColour]}>
         {
           [
             'January',
@@ -88,7 +127,7 @@ const CalendarHeader = ({ year, month, onToggleMonthLeft, onToggleMonthRight }) 
           ][month]
         }
       </span>
-      <div css={icon}>
+      <div css={[icon, headerColour]}>
         <span
           css={hover}
           className="fas fa-chevron-right"
@@ -111,6 +150,8 @@ const CalendarHeader = ({ year, month, onToggleMonthLeft, onToggleMonthRight }) 
 CalendarHeader.propTypes = {
   year: PropTypes.number.isRequired,
   month: PropTypes.number.isRequired,
+  onToggleToday: PropTypes.func.isRequired,
+  onAddEvent: PropTypes.func.isRequired,
   onToggleMonthLeft: PropTypes.func.isRequired,
   onToggleMonthRight: PropTypes.func.isRequired,
 };

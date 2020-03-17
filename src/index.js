@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import App from './components/App';
-import { AuthProvider, ThemeProvider, ToastProvider, ModalProvider } from './context';
+import { AuthProvider, DarkModeProvider, ToastProvider, ModalProvider } from './context';
 
 const httpLink = createHttpLink({
   uri: `${process.env.REACT_APP_SERVER_URI}/graphql`,
@@ -24,13 +24,13 @@ ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <ThemeProvider>
+        <DarkModeProvider>
           <ToastProvider>
             <ModalProvider>
               <App />
             </ModalProvider>
           </ToastProvider>
-        </ThemeProvider>
+        </DarkModeProvider>
       </AuthProvider>
     </ApolloProvider>
   </Router>,

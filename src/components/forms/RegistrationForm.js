@@ -14,10 +14,16 @@ const RegistrationForm = () => {
   const { login } = useAuth();
   const { closeModal } = useModal();
   const { addSuccessToast, addErrorToast } = useToast();
-  const [formValues, setFormValues] = useState({ username: '', email: '', password: '' });
+  const [formValues, setFormValues] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
 
   const [registerUser] = useMutation(REGISTER_USER, {
-    variables: { user: { username: formValues.username, email: formValues.email, password: formValues.password } },
+    variables: {
+      user: formValues,
+    },
     onCompleted: ({ registerUser: { username, token } }) => {
       closeModal();
       login(username, token);
@@ -51,10 +57,11 @@ const RegistrationForm = () => {
     return false;
   };
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFormValues((prevFormValues) => {
-      return { ...prevFormValues, [name]: value };
-    });
+  const handleChange = (name) => ({ target: { value } }) => {
+    setFormValues((previousFormValues) => ({
+      ...previousFormValues,
+      [name]: value,
+    }));
   };
 
   return (
@@ -65,8 +72,7 @@ const RegistrationForm = () => {
         label="Username"
         description="Username must contain 6-20 alphanumeric characters!"
         isRequired
-        name="username"
-        onChange={handleChange}
+        onChange={handleChange('username')}
         value={formValues.username}
       />
       <Input
@@ -74,8 +80,7 @@ const RegistrationForm = () => {
         label="Email"
         description="Please provide a valid email address!"
         isRequired
-        name="email"
-        onChange={handleChange}
+        onChange={handleChange('email')}
         value={formValues.email}
       />
       <Input
@@ -83,8 +88,7 @@ const RegistrationForm = () => {
         label="Password"
         description="Password must contain at least 8 characters!"
         isRequired
-        name="password"
-        onChange={handleChange}
+        onChange={handleChange('password')}
         value={formValues.password}
       />
       <InputButton value="Register" />

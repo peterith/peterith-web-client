@@ -1,21 +1,21 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useHistory } from 'react-router-dom';
-import { useTheme as useEmotionTheme } from 'emotion-theming';
-import { useAuth, useTheme, useModal, useToast } from '../hooks';
+import { useTheme } from 'emotion-theming';
+import { useAuth, useDarkMode, useModal, useToast } from '../../hooks';
 import Nav from './Nav';
 
 const Header = () => {
   const history = useHistory();
-  const { colours } = useEmotionTheme();
+  const { colours } = useTheme();
   const { auth, logout } = useAuth();
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { openAuthModal } = useModal();
   const { addSuccessToast } = useToast();
 
   const header = css`
     padding: 20px;
-    background-color: ${colours.background};
+    background-color: ${colours.background.secondary};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     font-size: 1.5rem;
     position: fixed;

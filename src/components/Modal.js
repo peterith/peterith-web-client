@@ -2,7 +2,7 @@
 import { jsx, css, keyframes } from '@emotion/core';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
-import { useModal } from '../../hooks';
+import { useModal } from '../hooks';
 
 const Modal = ({ children }) => {
   const { colours } = useTheme();
@@ -26,7 +26,7 @@ const Modal = ({ children }) => {
   const modal = css`
     padding: 30px;
     border-radius: 10px;
-    background-color: ${colours.background};
+    background-color: ${colours.background.primary};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     position: fixed;
     animation: ${slideUp} 0.5s forwards;

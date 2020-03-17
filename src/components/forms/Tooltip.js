@@ -55,6 +55,8 @@ const Tooltip = ({ children }) => {
   );
 };
 
-Tooltip.propTypes = { children: PropTypes.string.isRequired };
+Tooltip.propTypes = {
+  children: PropTypes.string.isRequired,
+};
 
 export default Tooltip;

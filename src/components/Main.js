@@ -3,11 +3,15 @@ import { jsx, css } from '@emotion/core';
 import { Route, Switch } from 'react-router-dom';
 import About from './About';
 import Contact from './Contact';
-import Profile from './Profile';
+import ProfileDashboard from './ProfileDashboard';
 
 const Main = () => {
   const style = css`
-    margin-bottom: 100px;
+    width: 100%;
+    margin-top: 150px;
+    @media (min-width: 960px) {
+      margin-top: 200px;
+    }
   `;
 
   return (
@@ -20,7 +24,7 @@ const Main = () => {
           <Contact />
         </Route>
         <Route path="/@:username">
-          <Profile />
+          <ProfileDashboard />
         </Route>
       </Switch>
     </main>

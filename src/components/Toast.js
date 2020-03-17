@@ -31,7 +31,7 @@ const Toast = ({ toastType, onClose, children }) => {
     display: flex;
     margin: 20px;
     border-radius: 10px;
-    background-color: ${colours.background};
+    background-color: ${colours.background.primary};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     animation: ${slideLeft} 0.5s;
   `;

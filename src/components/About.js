@@ -7,6 +7,15 @@ import Heading from './Heading';
 const About = () => {
   const { data, loading, error } = useQuery(GET_ABOUT_STORY);
 
+  const about = css`
+    box-sizing: border-box;
+    padding: 0px 20px;
+    margin: auto;
+    @media (min-width: 960px) {
+      width: 960px;
+    }
+  `;
+
   const storySection = css`
     margin: 40px auto;
   `;
@@ -20,7 +29,7 @@ const About = () => {
   }
 
   return (
-    <div>
+    <div css={about}>
       <section>
         <Heading headingLevel={1}>{data.getAboutStory.title}</Heading>
         <p>{data.getAboutStory.description}</p>

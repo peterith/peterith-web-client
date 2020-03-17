@@ -11,7 +11,7 @@ const Nav = () => {
   const fullNav = css`
     display: none;
     letter-spacing: 3px;
-    @media (min-width: 850px) {
+    @media (min-width: 960px) {
       display: block;
     }
   `;

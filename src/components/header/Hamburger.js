@@ -1,34 +1,18 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from 'emotion-theming';
-import { useToggle } from '../hooks';
+import { useToggle, useClickOutside } from '../../hooks';
 
 const Hamburger = () => {
   const { colours } = useTheme();
   const [isNavOpened, toggleNavOpened] = useToggle(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!ref.current.contains(event.target)) {
-        toggleNavOpened();
-      }
-    };
-
-    if (isNavOpened) {
-      document.addEventListener('mousedown', handleClickOutside, false);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside, false);
-    };
-  }, [isNavOpened, toggleNavOpened]);
+  const node = useClickOutside(isNavOpened, toggleNavOpened);
 
   const hamburger = css`
     display: flex;
     padding: 8px;
-    @media (min-width: 850px) {
+    @media (min-width: 960px) {
       display: none;
     }
   `;
@@ -64,7 +48,7 @@ const Hamburger = () => {
   `;
 
   return (
-    <div css={hamburger} ref={ref}>
+    <div css={hamburger} ref={node}>
       <span
         css={icon}
         className="fas fa-bars"

@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import { useTheme } from 'emotion-theming';
 import Tooltip from './Tooltip';
 
-const Input = ({ type, label, description, value, isRequired, onChange }) => {
+const Select = ({ label, description, isRequired, onChange, options, value }) => {
   const { colours } = useTheme();
 
-  const input = css`
+  const select = css`
     margin: 10px 0px;
     border-radius: 5px;
     padding: 3px;
@@ -27,24 +27,35 @@ const Input = ({ type, label, description, value, isRequired, onChange }) => {
     <label htmlFor={id}>
       {label}: {description && <Tooltip>{description}</Tooltip>} {isRequired && <span css={red}>*</span>}
       <br />
-      <input css={input} id={id} type={type} value={value} required={isRequired} onChange={onChange} />
+      <select id={id} css={select} onChange={onChange} value={value}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       <br />
     </label>
   );
 };
 
-Input.propTypes = {
-  type: PropTypes.string.isRequired,
+Select.propTypes = {
   label: PropTypes.string.isRequired,
   description: PropTypes.string,
-  value: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  value: PropTypes.string.isRequired,
 };
 
-Input.defaultProps = {
+Select.defaultProps = {
   description: null,
   isRequired: false,
 };
 
-export default Input;
+export default Select;
