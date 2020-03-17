@@ -5,12 +5,12 @@ import { useTheme } from 'emotion-theming';
 const Contact = () => {
   const { colours } = useTheme();
 
-  const section = css`
+  const contact = css`
     text-align: center;
   `;
 
   const text = css`
-    margin-bottom: 30px;
+    margin: 30px;
   `;
 
   const link = css`
@@ -28,7 +28,7 @@ const Contact = () => {
   `;
 
   return (
-    <section css={section}>
+    <section css={contact}>
       <p css={text}>Let&apos;s keep in touch!</p>
       <a css={link} href="https://www.linkedin.com/in/peterith" target="_blank" rel="noopener noreferrer">
         <span className="fab fa-linkedin-in" /> LinkedIn

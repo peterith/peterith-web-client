@@ -13,28 +13,41 @@ const AuthProvider = ({ children }) => {
     token: localStorage.getItem('token'),
   });
 
-  const login = (username, token) => {
+  const login = async (username, token) => {
     localStorage.setItem('username', username);
     localStorage.setItem('token', token);
-    client.resetStore();
-    setAuth((prevAuth) => {
-      return { ...prevAuth, username, token };
+    client.clearStore().then(() => {
+      history.push(`/@${username}`);
+      setAuth((previousAuth) => {
+        return {
+          ...previousAuth,
+          username,
+          token,
+        };
+      });
     });
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
-    client.resetStore();
-    history.push('/');
-    setAuth((prevAuth) => {
-      return { ...prevAuth, username: null, token: null };
+    client.clearStore().then(() => {
+      history.push('/');
+      setAuth((previousAuth) => {
+        return {
+          ...previousAuth,
+          username: null,
+          token: null,
+        };
+      });
     });
   };
 
   return <AuthContext.Provider value={{ auth, login, logout }}>{children}</AuthContext.Provider>;
 };
 
-AuthProvider.propTypes = { children: PropTypes.element.isRequired };
+AuthProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+};
 
 export { AuthContext, AuthProvider };

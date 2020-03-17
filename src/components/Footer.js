@@ -3,6 +3,7 @@ import { jsx, css } from '@emotion/core';
 
 const Footer = () => {
   const style = css`
+    margin: 50px auto;
     text-align: center;
   `;
 

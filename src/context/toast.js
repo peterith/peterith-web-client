@@ -22,13 +22,21 @@ const ToastProvider = ({ children }) => {
 
   const addErrorToast = (message) => {
     setToasts((prevToasts) => {
-      return prevToasts.concat({ id: uuidv4(), toastType: ToastTypeEnum.ERROR, message });
+      return prevToasts.concat({
+        id: uuidv4(),
+        toastType: ToastTypeEnum.ERROR,
+        message,
+      });
     });
   };
 
   const addSuccessToast = (message) => {
     setToasts((prevToasts) => {
-      return prevToasts.concat({ id: uuidv4(), toastType: ToastTypeEnum.SUCCESS, message });
+      return prevToasts.concat({
+        id: uuidv4(),
+        toastType: ToastTypeEnum.SUCCESS,
+        message,
+      });
     });
   };
 
@@ -59,6 +67,8 @@ const ToastProvider = ({ children }) => {
   );
 };
 
-ToastProvider.propTypes = { children: PropTypes.element.isRequired };
+ToastProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+};
 
 export { ToastContext, ToastProvider };

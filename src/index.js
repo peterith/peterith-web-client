@@ -7,12 +7,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import App from './components/App';
-import { AuthProvider, ThemeProvider, ToastProvider, ModalProvider } from './context';
-
-const { REACT_APP_SERVER_SCHEME, REACT_APP_SERVER_HOST, REACT_APP_SERVER_PORT } = process.env;
+import { AuthProvider, DarkModeProvider, ToastProvider, ModalProvider } from './context';
 
 const httpLink = createHttpLink({
-  uri: `${REACT_APP_SERVER_SCHEME}://${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}/graphql`,
+  uri: `${process.env.REACT_APP_SERVER_URI}/graphql`,
 });
 
 const authLink = setContext((_request, { headers }) => {
@@ -26,13 +24,13 @@ ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <ThemeProvider>
+        <DarkModeProvider>
           <ToastProvider>
             <ModalProvider>
               <App />
             </ModalProvider>
           </ToastProvider>
-        </ThemeProvider>
+        </DarkModeProvider>
       </AuthProvider>
     </ApolloProvider>
   </Router>,
