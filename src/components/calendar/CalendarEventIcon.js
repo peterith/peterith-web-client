@@ -2,7 +2,7 @@
 import { jsx, css } from '@emotion/core';
 import { useTheme } from 'emotion-theming';
 
-const CalendarEventIcon = () => {
+const CalendarEventIcon = ({ onClick }) => {
   const { colours } = useTheme();
   const style = css`
     color: ${colours.primary.main};
@@ -13,7 +13,7 @@ const CalendarEventIcon = () => {
     }
   `;
 
-  return <span css={style} className="fas fa-dumbbell" />;
+  return <span css={style} className="fas fa-dumbbell" onClick={onClick} />;
 };
 
 export default CalendarEventIcon;

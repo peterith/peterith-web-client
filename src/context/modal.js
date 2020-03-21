@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { createContext, useState } from 'react';
@@ -61,7 +62,7 @@ const ModalProvider = ({ children }) => {
       {createPortal(
         options.isOpened && (
           <Modal>
-            <ModalContent onSubmit={options.payload.onSubmit} />
+            <ModalContent {...options.payload} />
           </Modal>
         ),
         document.getElementById('modal-root'),

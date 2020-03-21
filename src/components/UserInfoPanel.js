@@ -11,8 +11,9 @@ import { UPDATE_USER } from '../graphql/mutations';
 import { InputTypeEnum } from '../utils/enums';
 import Heading from './Heading';
 import EditableInput from './EditableInput';
+import { validateUsername, validateEmail } from '../utils/validation';
 
-const UserInfoGrid = ({ className }) => {
+const UserInfoPanel = ({ className }) => {
   const { colours } = useTheme();
   const { username } = useParams();
   const { login } = useAuth();
@@ -40,9 +41,10 @@ const UserInfoGrid = ({ className }) => {
       login(updateUser.username, token);
       setFormValues(updateUser);
       setLastSavedFormValues(updateUser);
-      addSuccessToast('User information has been saved!');
+      addSuccessToast('User information has been saved.');
     },
     onError({ graphQLErrors }) {
+      setFormValues(lastSavedFormValues);
       addErrorToast(graphQLErrors[0].message);
     },
   });
@@ -66,16 +68,32 @@ const UserInfoGrid = ({ className }) => {
     text-align: center;
   `;
 
-  const handleChange = (name) => ({ target: { value } }) => {
+  const handleChange = (field) => (value) => {
     setFormValues((previousFormValues) => ({
       ...previousFormValues,
-      [name]: value,
+      [field]: value,
     }));
   };
 
-  const handleBlur = () => {
-    if (JSON.stringify(formValues) !== JSON.stringify(lastSavedFormValues)) {
-      updateUserMutation();
+  const handleBlurUsername = () => {
+    if (formValues.username !== lastSavedFormValues.username) {
+      if (validateUsername(formValues.username)) {
+        updateUserMutation();
+      } else {
+        setFormValues(lastSavedFormValues);
+        addErrorToast('You have entered an invalid username.');
+      }
+    }
+  };
+
+  const handleBlurEmail = () => {
+    if (formValues.email !== lastSavedFormValues.email) {
+      if (validateEmail(formValues.email)) {
+        updateUserMutation();
+      } else {
+        setFormValues(lastSavedFormValues);
+        addErrorToast('You have entered an invalid email address.');
+      }
     }
   };
 
@@ -98,7 +116,7 @@ const UserInfoGrid = ({ className }) => {
         label="Username"
         value={formValues.username}
         onChange={handleChange('username')}
-        onBlur={handleBlur}
+        onBlur={handleBlurUsername}
       />
       <strong>Email:</strong>
       <EditableInput
@@ -106,18 +124,18 @@ const UserInfoGrid = ({ className }) => {
         label="Email"
         value={formValues.email}
         onChange={handleChange('email')}
-        onBlur={handleBlur}
+        onBlur={handleBlurEmail}
       />
     </div>
   );
 };
 
-UserInfoGrid.propTypes = {
+UserInfoPanel.propTypes = {
   className: PropTypes.string,
 };
 
-UserInfoGrid.defaultProps = {
+UserInfoPanel.defaultProps = {
   className: null,
 };
 
-export default UserInfoGrid;
+export default UserInfoPanel;

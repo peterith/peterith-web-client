@@ -7,15 +7,16 @@ import Heading from '../Heading';
 import Input from './Input';
 import InputButton from './InputButton';
 import Select from './Select';
+import DatePicker from './DatePicker';
 
-const CalendarEventForm = ({ onSubmit }) => {
+const CalendarEventForm = ({ onSubmit, startDate, endDate }) => {
   const [formValues, setFormValues] = useState({
     title: '&#127947;',
     type: CalendarEventTypeEnum.FITNESS,
     isPublic: false,
     isAllDay: false,
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate,
+    endDate,
   });
 
   const handleSubmit = (event) => {
@@ -47,20 +48,48 @@ const CalendarEventForm = ({ onSubmit }) => {
     }));
   };
 
+  const handleIsAllDayChange = ({ target: { value } }) => {
+    if (value === YesNoEnum.YES) {
+      setFormValues((previousFormValues) => {
+        const newStartDate = new Date(previousFormValues.startDate);
+        newStartDate.setHours(0, 0, 0);
+        const newEndDate = new Date(previousFormValues.endDate);
+        newEndDate.setHours(0, 0, 0);
+
+        return {
+          ...previousFormValues,
+          isAllDay: true,
+          startDate: newStartDate,
+          endDate: newEndDate,
+        };
+      });
+    } else {
+      setFormValues((previousFormValues) => ({
+        ...previousFormValues,
+        isAllDay: false,
+      }));
+    }
+  };
+
+  const handleDateChange = (name) => (date) => {
+    setFormValues((previousFormValues) => ({
+      ...previousFormValues,
+      [name]: date,
+    }));
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Heading headingLevel={2}>Calendar Event</Heading>
       <Input
         type={InputTypeEnum.TEXT}
         label="Title"
+        value={formValues.title}
         isRequired
         onChange={handleChange('title')}
-        value={formValues.title}
       />
       <Select
         label="Type"
-        isRequired
-        onChange={handleChange('type')}
         options={[
           {
             label: 'Fitness',
@@ -72,11 +101,11 @@ const CalendarEventForm = ({ onSubmit }) => {
           },
         ]}
         value={formValues.type}
+        isRequired
+        onChange={handleChange('type')}
       />
       <Select
         label="Is Public"
-        isRequired
-        onChange={handleBooleanChange('isPublic')}
         options={[
           {
             label: 'Yes',
@@ -88,11 +117,11 @@ const CalendarEventForm = ({ onSubmit }) => {
           },
         ]}
         value={formValues.isPublic ? YesNoEnum.YES : YesNoEnum.NO}
+        isRequired
+        onChange={handleBooleanChange('isPublic')}
       />
       <Select
         label="Is All Day"
-        isRequired
-        onChange={handleBooleanChange('isAllDay')}
         options={[
           {
             label: 'Yes',
@@ -104,6 +133,22 @@ const CalendarEventForm = ({ onSubmit }) => {
           },
         ]}
         value={formValues.isAllDay ? YesNoEnum.YES : YesNoEnum.NO}
+        isRequired
+        onChange={handleIsAllDayChange}
+      />
+      <DatePicker
+        label="Start Date"
+        selected={formValues.startDate}
+        isAllDay={formValues.isAllDay}
+        isRequired
+        onChange={handleDateChange('startDate')}
+      />
+      <DatePicker
+        label="End Date"
+        selected={formValues.endDate}
+        isAllDay={formValues.isAllDay}
+        isRequired
+        onChange={handleDateChange('endDate')}
       />
       <InputButton value="Add" />
     </form>
@@ -112,6 +157,13 @@ const CalendarEventForm = ({ onSubmit }) => {
 
 CalendarEventForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  startDate: PropTypes.instanceOf(Date),
+  endDate: PropTypes.instanceOf(Date),
+};
+
+CalendarEventForm.defaultProps = {
+  startDate: new Date().setHours(0, 0, 0),
+  endDate: new Date().setHours(0, 0, 0),
 };
 
 export default CalendarEventForm;
