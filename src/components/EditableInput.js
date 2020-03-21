@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { useToggle, useClickOutside } from '../hooks';
 
-const EditableInput = ({ type, value, onChange, onBlur }) => {
+const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange, onBlur, onDelete }) => {
   const { colours } = useTheme();
-  const [isHovering, setIsHovering] = useState(false);
-  const [isEditing, toggleEditing] = useToggle();
+  const [isEditing, toggleEditing] = useToggle(isInitiallyEditing);
   const inputNode = useRef(null);
   const editableInputNode = useClickOutside(isEditing, () => {
     toggleEditing();
@@ -30,8 +29,11 @@ const EditableInput = ({ type, value, onChange, onBlur }) => {
     width: 200px;
   `;
 
-  const icon = css`
+  const icons = css`
     margin-left: auto;
+  `;
+
+  const icon = css`
     cursor: pointer;
     transition: color 0.3s;
     &:hover {
@@ -39,31 +41,48 @@ const EditableInput = ({ type, value, onChange, onBlur }) => {
     }
   `;
 
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovering(false);
+  const handleChange = ({ target: { value: inputValue } }) => {
+    onChange(inputValue);
   };
 
   return (
-    <div css={editableInput} ref={editableInputNode} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div css={editableInput} ref={editableInputNode}>
       {isEditing ? (
-        <input css={input} ref={inputNode} type={type} value={value} onChange={onChange} onBlur={onBlur} />
-      ) : (
-        <span>{value}</span>
-      )}
-      {isHovering && !isEditing && (
-        <span
-          css={icon}
-          className="fas fa-edit"
-          role="button"
-          aria-label="edit information"
-          tabIndex="0"
-          onKeyPress={toggleEditing}
-          onClick={toggleEditing}
+        <input
+          css={input}
+          ref={inputNode}
+          type={type}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          onBlur={onBlur}
         />
+      ) : (
+        value
+      )}
+      {!isEditing && (
+        <div css={icons}>
+          <span
+            css={icon}
+            className="fas fa-edit"
+            role="button"
+            aria-label="edit field"
+            tabIndex="0"
+            onKeyPress={toggleEditing}
+            onClick={toggleEditing}
+          />{' '}
+          {onDelete && (
+            <span
+              css={icon}
+              className="fas fa-trash-alt"
+              role="button"
+              aria-label="delete field"
+              tabIndex="0"
+              onKeyPress={onDelete}
+              onClick={onDelete}
+            />
+          )}
+        </div>
       )}
     </div>
   );
@@ -71,9 +90,19 @@ const EditableInput = ({ type, value, onChange, onBlur }) => {
 
 EditableInput.propTypes = {
   type: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  isInitiallyEditing: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
+};
+
+EditableInput.defaultProps = {
+  value: '',
+  placeholder: null,
+  isInitiallyEditing: false,
+  onDelete: null,
 };
 
 export default EditableInput;

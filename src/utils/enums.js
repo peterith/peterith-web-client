@@ -24,6 +24,12 @@ export const ModalEnum = {
   CALENDAR_EVENT: 'CALENDAR_EVENT',
 };
 
+export const TaskListEnum = {
+  TO_DO: 'TO_DO',
+  IN_PROGRESS: 'IN_PROGRESS',
+  DONE: 'DONE',
+};
+
 export const ToastTypeEnum = {
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',

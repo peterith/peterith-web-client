@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useTheme } from 'emotion-theming';
 import { GET_CALENDAR_EVENTS_BY_DATE_RANGE } from '../../graphql/queries';
-import { ADD_CALENDAR_EVENT } from '../../graphql/mutations';
+import { ADD_CALENDAR_EVENT, DELETE_CALENDAR_EVENT } from '../../graphql/mutations';
 import { useToast, useModal } from '../../hooks';
 import CalendarHeader from './CalanderHeader';
 import CalendarGrid from './CalanderGrid';
@@ -26,8 +26,8 @@ const Calendar = () => {
 
   useQuery(GET_CALENDAR_EVENTS_BY_DATE_RANGE, {
     variables: {
-      startDate: new Date(Date.UTC(selectedDate.year, selectedDate.month, 1 - previousMonth.getDay())),
-      endDate: new Date(Date.UTC(selectedDate.year, selectedDate.month + 1, (9 - nextMonth.getDay()) % 7)),
+      startDate: new Date(selectedDate.year, selectedDate.month, 1 - previousMonth.getDay()),
+      endDate: new Date(selectedDate.year, selectedDate.month + 1, (9 - nextMonth.getDay()) % 7),
     },
     onCompleted: ({ getCalendarEventsByDateRange }) => {
       setEvents(getCalendarEventsByDateRange);
@@ -39,11 +39,23 @@ const Calendar = () => {
 
   const [addCalendarEventMutation] = useMutation(ADD_CALENDAR_EVENT, {
     onCompleted: ({ addCalendarEvent }) => {
+      closeModal();
       setEvents((previousEvents) => {
-        closeModal();
-        previousEvents.push(addCalendarEvent);
-        addSuccessToast('Successfully added an event!');
+        return previousEvents.concat(addCalendarEvent);
       });
+      addSuccessToast('Event has been added!');
+    },
+    onError: ({ graphQLErrors }) => {
+      addErrorToast(graphQLErrors[0].message);
+    },
+  });
+
+  const [deleteCalendarEventMutation] = useMutation(DELETE_CALENDAR_EVENT, {
+    onCompleted: ({ deleteCalendarEvent }) => {
+      setEvents((previousEvents) => {
+        return previousEvents.filter(({ id }) => deleteCalendarEvent.id !== id);
+      });
+      addSuccessToast('Event has been deleted!');
     },
     onError: ({ graphQLErrors }) => {
       addErrorToast(graphQLErrors[0].message);
@@ -97,14 +109,18 @@ const Calendar = () => {
     });
   };
 
-  const handleSelectDate = (year, month, date) => {
+  const handleSelectDate = (date) => {
     return () => {
-      setSelectedDate({
-        year,
-        month,
-        date,
-      });
+      setSelectedDate(date);
     };
+  };
+
+  const handleClickEvent = (id) => () => {
+    deleteCalendarEventMutation({
+      variables: {
+        id,
+      },
+    });
   };
 
   return (
@@ -113,11 +129,20 @@ const Calendar = () => {
         year={selectedDate.year}
         month={selectedDate.month}
         onToggleToday={handleToggleToday}
-        onAddEvent={openCalendarEventModal({ onSubmit: addCalendarEventMutation })}
+        onAddEvent={openCalendarEventModal({
+          onSubmit: addCalendarEventMutation,
+          startDate: new Date(selectedDate.year, selectedDate.month, selectedDate.date),
+          endDate: new Date(selectedDate.year, selectedDate.month, selectedDate.date),
+        })}
         onToggleMonthLeft={handleToggleMonthLeft}
         onToggleMonthRight={handleToggleMonthRight}
       />
-      <CalendarGrid events={events} selectedDate={selectedDate} onSelectDate={handleSelectDate} />
+      <CalendarGrid
+        events={events}
+        selectedDate={selectedDate}
+        onSelectDate={handleSelectDate}
+        onClickEvent={handleClickEvent}
+      />
     </div>
   );
 };

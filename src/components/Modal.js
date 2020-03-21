@@ -39,7 +39,11 @@ const Modal = ({ children }) => {
     font-size: 1.3rem;
     float: right;
     color: ${colours.text};
+    transition: color 0.3s;
     cursor: pointer;
+    &:hover {
+      color: ${colours.primary.main};
+    }
   `;
 
   return (

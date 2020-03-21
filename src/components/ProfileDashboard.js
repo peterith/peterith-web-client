@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import Calander from './calendar';
-import UserInfoGrid from './UserInfoGrid';
+import UserInfoPanel from './UserInfoPanel';
+import TaskPanel from './TaskPanel';
 
 const ProfileDashboard = () => {
   const profileDashboard = css`
@@ -20,11 +21,16 @@ const ProfileDashboard = () => {
 
   const calendarContainer = css`
     grid-column: span 6;
+    grid-row: span 2;
     display: flex;
     justify-content: center;
   `;
 
-  const userInfoGrid = css`
+  const userInfoPanel = css`
+    grid-column: span 4;
+  `;
+
+  const taskPanel = css`
     grid-column: span 4;
   `;
 
@@ -33,7 +39,8 @@ const ProfileDashboard = () => {
       <div css={calendarContainer}>
         <Calander />
       </div>
-      <UserInfoGrid css={userInfoGrid} />
+      <UserInfoPanel css={userInfoPanel} />
+      <TaskPanel css={taskPanel} />
     </div>
   );
 };

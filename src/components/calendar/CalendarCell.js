@@ -4,7 +4,7 @@ import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import CalendarEventIcon from './CalendarEventIcon';
 
-const CalendarCell = ({ year, month, date, events, isSelected, isGreyed, isToday, onClick }) => {
+const CalendarCell = ({ date, events, isSelected, isGreyed, isToday, onSelect, onClickEvent }) => {
   const { colours } = useTheme();
 
   const cell = css`
@@ -39,29 +39,38 @@ const CalendarCell = ({ year, month, date, events, isSelected, isGreyed, isToday
     padding: 3px;
   `;
 
+  const style = [cell];
+  if (isSelected) {
+    style.push(selected);
+  } else if (isGreyed) {
+    style.push(greyed);
+  }
+
   return (
     <div
-      css={isGreyed ? [cell, greyed] : isSelected ? [cell, selected] : cell}
+      css={style}
       role="gridcell"
       aria-label="select date"
       tabIndex={0}
-      onKeyPress={onClick(year, month, date)}
-      onClick={onClick(year, month, date)}
+      onKeyPress={onSelect(date)}
+      onClick={onSelect(date)}
     >
       <div>
-        <span css={isToday && circle}>{date}</span>
+        <span css={isToday && circle}>{date.date}</span>
       </div>
       {events.map(({ id }) => (
-        <CalendarEventIcon key={id} />
+        <CalendarEventIcon key={id} onClick={onClickEvent(id)} />
       ))}
     </div>
   );
 };
 
 CalendarCell.propTypes = {
-  year: PropTypes.number.isRequired,
-  month: PropTypes.number.isRequired,
-  date: PropTypes.number.isRequired,
+  date: PropTypes.shape({
+    year: PropTypes.number.isRequired,
+    month: PropTypes.number.isRequired,
+    date: PropTypes.number.isRequired,
+  }).isRequired,
   events: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -69,13 +78,14 @@ CalendarCell.propTypes = {
       type: PropTypes.string.isRequired,
       isAllDay: PropTypes.bool.isRequired,
       startDate: PropTypes.string.isRequired,
-      endDate: PropTypes.string.isRequired,
+      endDate: PropTypes.string,
     }),
   ),
   isSelected: PropTypes.bool,
   isGreyed: PropTypes.bool,
   isToday: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onClickEvent: PropTypes.func.isRequired,
 };
 
 CalendarCell.defaultProps = {

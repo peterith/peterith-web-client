@@ -33,6 +33,18 @@ export const GET_CALENDAR_EVENTS_BY_DATE_RANGE = gql`
   }
 `;
 
+export const GET_TASKS = gql`
+  query GetTasks {
+    getTasks {
+      id
+      title
+      list
+      isPublic
+      order
+    }
+  }
+`;
+
 export const GET_USER = gql`
   query GetUser($username: String!) {
     getUser(username: $username) {
