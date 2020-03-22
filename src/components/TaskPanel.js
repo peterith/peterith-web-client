@@ -44,10 +44,10 @@ const TaskPanel = ({ className }) => {
   const [updateTaskMutation] = useMutation(UPDATE_TASK, {
     onCompleted: ({ updateTask: { __typename, ...updateTask } }) => {
       setToDoTasks((previousTasks) => {
-        return previousTasks.map((task) => (task.tempId ? updateTask : task));
+        return previousTasks.map((task) => (task.id === updateTask.id ? updateTask : task));
       });
       setLastSavedToDoTasks((previousTasks) => {
-        return previousTasks.map((task) => (task.tempId ? updateTask : task));
+        return previousTasks.map((task) => (task.id === updateTask.id ? updateTask : task));
       });
       addSuccessToast('Task has been updated.');
     },
@@ -134,36 +134,38 @@ const TaskPanel = ({ className }) => {
     });
   };
 
-  const handleChangeTask = (id, value) => {
+  const handleChangeTask = (field) => (id, value) => {
     setToDoTasks((previousTasks) => {
       return previousTasks.map((task) => {
-        return task.id !== id && task.tempId !== id
-          ? task
-          : {
+        return task.id === id || task.tempId === id
+          ? {
               ...task,
-              title: value,
-            };
+              [field]: value,
+            }
+          : task;
       });
     });
   };
 
-  const handleBlurTask = (id) => {
-    const blurredTask = todoTasks.find((task) => task.id === id || task.tempId === id);
-    if (blurredTask.title) {
-      const { id: _, tempId, ...task } = blurredTask;
-      if (blurredTask.tempId) {
+  const handleClickOutsideTask = (id) => {
+    const { id: _, tempId, ...referenceTask } = todoTasks.find((task) => task.id === id || task.tempId === id);
+    if (referenceTask.title) {
+      if (tempId) {
         addTaskMutation({
           variables: {
-            task,
+            task: referenceTask,
           },
         });
       } else {
-        const lastSavedBlurredTask = lastSavedToDoTasks.find((task) => task.id === id);
-        if (lastSavedBlurredTask.title !== blurredTask.title) {
+        const lastSavedReferenceTask = lastSavedToDoTasks.find((lastSavedTask) => lastSavedTask.id === id);
+        if (
+          lastSavedReferenceTask.title !== referenceTask.title ||
+          lastSavedReferenceTask.deadline !== referenceTask.deadline
+        ) {
           updateTaskMutation({
             variables: {
               id,
-              task,
+              task: referenceTask,
             },
           });
         }
@@ -200,8 +202,9 @@ const TaskPanel = ({ className }) => {
           heading="To Do"
           tasks={todoTasks}
           onAddTask={handleAddTask}
-          onChangeTask={handleChangeTask}
-          onBlurTask={handleBlurTask}
+          onChangeTaskTitle={handleChangeTask('title')}
+          onChangeTaskDeadline={handleChangeTask('deadline')}
+          onClickOutsideTask={handleClickOutsideTask}
           onDeleteTask={handleDeleteTask}
         />
       </div>

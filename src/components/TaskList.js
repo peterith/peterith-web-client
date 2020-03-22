@@ -1,23 +1,37 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
+import { useDarkMode } from '../hooks';
 import TaskItem from './TaskItem';
 import Heading from './Heading';
 
-const TaskList = ({ heading, tasks, onAddTask, onChangeTask, onBlurTask, onDeleteTask }) => {
+const TaskList = ({
+  heading,
+  tasks,
+  onAddTask,
+  onChangeTaskTitle,
+  onChangeTaskDeadline,
+  onClickOutsideTask,
+  onDeleteTask,
+}) => {
   const { colours } = useTheme();
+  const { isDarkMode } = useDarkMode();
 
   const taskList = css`
     padding: 10px;
-    border: 1px solid ${colours.primary.light};
+    border: 2px solid ${colours.primary.light};
     border-radius: 10px;
     transition: border 0.3s;
     &:hover {
       border-color: ${colours.primary.dark};
     }
+  `;
+
+  const lightMode = css`
+    border-color: ${colours.text};
   `;
 
   const headingStyle = css`
@@ -33,10 +47,14 @@ const TaskList = ({ heading, tasks, onAddTask, onChangeTask, onBlurTask, onDelet
     }
   `;
 
+  const draggable = css`
+    margin-top: 10px;
+  `;
+
   return (
     <Droppable droppableId={uuidv4()}>
-      {(provided) => (
-        <div {...provided.droppableProps} css={taskList} ref={provided.innerRef}>
+      {({ innerRef: ref, droppableProps, placeholder }) => (
+        <div ref={ref} {...droppableProps} css={isDarkMode ? taskList : [taskList, lightMode]}>
           {onAddTask && (
             <span
               css={icon}
@@ -52,15 +70,21 @@ const TaskList = ({ heading, tasks, onAddTask, onChangeTask, onBlurTask, onDelet
             {heading}
           </Heading>
           {tasks.map((task) => (
-            <TaskItem
-              key={task.id || task.tempId}
-              task={task}
-              onChange={onChangeTask}
-              onBlur={onBlurTask}
-              onDelete={onDeleteTask}
-            />
+            <Draggable key={task.id || task.tempId} draggableId={task.id || task.tempId} index={task.order}>
+              {({ innerRef, draggableProps, dragHandleProps }) => (
+                <div ref={innerRef} {...draggableProps} {...dragHandleProps} css={draggable}>
+                  <TaskItem
+                    task={task}
+                    onChangeTitle={onChangeTaskTitle}
+                    onChangeDeadline={onChangeTaskDeadline}
+                    onClickOutside={onClickOutsideTask}
+                    onDelete={onDeleteTask}
+                  />
+                </div>
+              )}
+            </Draggable>
           ))}
-          {provided.placeholder}
+          {placeholder}
         </div>
       )}
     </Droppable>
@@ -73,15 +97,17 @@ TaskList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       tempId: PropTypes.string,
-      title: PropTypes.string,
       list: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      deadline: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
       isPublic: PropTypes.bool.isRequired,
       order: PropTypes.number.isRequired,
     }),
   ).isRequired,
   onAddTask: PropTypes.func.isRequired,
-  onChangeTask: PropTypes.func.isRequired,
-  onBlurTask: PropTypes.func.isRequired,
+  onChangeTaskTitle: PropTypes.func.isRequired,
+  onChangeTaskDeadline: PropTypes.func.isRequired,
+  onClickOutsideTask: PropTypes.func.isRequired,
   onDeleteTask: PropTypes.func.isRequired,
 };
 

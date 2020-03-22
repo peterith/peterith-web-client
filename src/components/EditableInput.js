@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { useToggle, useClickOutside } from '../hooks';
@@ -8,17 +8,16 @@ import { useToggle, useClickOutside } from '../hooks';
 const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange, onBlur, onDelete }) => {
   const { colours } = useTheme();
   const [isEditing, toggleEditing] = useToggle(isInitiallyEditing);
-  const inputNode = useRef(null);
-  const editableInputNode = useClickOutside(isEditing, () => {
+  const node = useClickOutside(isEditing, () => {
     toggleEditing();
     onBlur();
   });
 
   useEffect(() => {
     if (isEditing) {
-      inputNode.current.focus();
+      node.current.focus();
     }
-  }, [isEditing]);
+  }, [node, isEditing]);
 
   const editableInput = css`
     display: flex;
@@ -46,11 +45,11 @@ const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange,
   };
 
   return (
-    <div css={editableInput} ref={editableInputNode}>
+    <div css={editableInput}>
       {isEditing ? (
         <input
           css={input}
-          ref={inputNode}
+          ref={node}
           type={type}
           value={value}
           placeholder={placeholder}
