@@ -17,8 +17,9 @@ export const ADD_TASK = gql`
   mutation AddTask($task: TaskInput!) {
     addTask(task: $task) {
       id
-      title
       list
+      title
+      deadline
       isPublic
       order
     }
@@ -37,8 +38,9 @@ export const DELETE_TASK = gql`
   mutation DeleteTask($id: ID!) {
     deleteTask(id: $id) {
       id
-      title
       list
+      title
+      deadline
       isPublic
       order
     }
@@ -73,8 +75,9 @@ export const REORDER_TASK = gql`
   mutation ReorderTask($id: ID!, $newOrder: Int!) {
     reorderTask(id: $id, newOrder: $newOrder) {
       id
-      title
       list
+      title
+      deadline
       isPublic
       order
     }
@@ -85,8 +88,9 @@ export const UPDATE_TASK = gql`
   mutation UpdateTask($id: ID!, $task: TaskInput!) {
     updateTask(id: $id, task: $task) {
       id
-      title
       list
+      title
+      deadline
       isPublic
       order
     }

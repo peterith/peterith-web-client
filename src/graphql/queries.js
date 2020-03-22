@@ -37,8 +37,9 @@ export const GET_TASKS = gql`
   query GetTasks {
     getTasks {
       id
-      title
       list
+      title
+      deadline
       isPublic
       order
     }

@@ -3,7 +3,6 @@ import { jsx, css } from '@emotion/core';
 import ReactDatePicker from 'react-datepicker';
 import { v4 as uuidv4 } from 'uuid';
 import { useTheme } from 'emotion-theming';
-import 'react-datepicker/dist/react-datepicker.css';
 import Tooltip from './Tooltip';
 
 const DatePicker = ({ label, description, selected, isAllDay, isRequired, onChange }) => {

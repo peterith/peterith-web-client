@@ -8,6 +8,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { AuthProvider, DarkModeProvider, ToastProvider, ModalProvider } from './context';
 import App from './components/App';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const httpLink = createHttpLink({
   uri: `${process.env.REACT_APP_SERVER_URI}/graphql`,
