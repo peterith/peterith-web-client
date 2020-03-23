@@ -12,6 +12,7 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
   const { isDarkMode } = useDarkMode();
   const [isEditing, toggleEditing] = useToggle(!!task.tempId);
   const inputNode = useRef(null);
+
   const taskItemNode = useClickOutside(isEditing, () => {
     toggleEditing();
     onClickOutside(task.id || task.tempId);
@@ -27,20 +28,24 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
     display: grid;
     grid-template-columns: auto 40px;
     background-color: ${colours.background.secondary};
-    border: 2px solid ${colours.primary.light};
+    border: 2px solid ${colours.text};
     border-radius: 5px;
     padding: 10px;
+    transition: box-shadow 0.3s;
+    &:active {
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
+    }
+  `;
+
+  const darkMode = css`
     transition: border-color 0.3s, box-shadow 0.3s;
+    border-color: ${colours.primary.light};
     &:hover {
       border-color: ${colours.primary.dark};
     }
     &:active {
       border-color: ${colours.primary.dark};
-      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     }
-  `;
-  const lightMode = css`
-    border-color: ${colours.text};
   `;
 
   const input = css`
@@ -81,7 +86,7 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
   };
 
   return (
-    <div css={isDarkMode ? taskItem : [taskItem, lightMode]} ref={taskItemNode}>
+    <div css={isDarkMode ? [taskItem, darkMode] : taskItem} ref={taskItemNode}>
       {isEditing ? (
         <input
           css={input}

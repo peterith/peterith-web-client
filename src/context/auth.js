@@ -18,12 +18,9 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('token', token);
     client.clearStore().then(() => {
       history.push(`/@${username}`);
-      setAuth((previousAuth) => {
-        return {
-          ...previousAuth,
-          username,
-          token,
-        };
+      setAuth({
+        username,
+        token,
       });
     });
   };
@@ -33,17 +30,25 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     client.clearStore().then(() => {
       history.push('/');
-      setAuth((previousAuth) => {
-        return {
-          ...previousAuth,
-          username: null,
-          token: null,
-        };
+      setAuth({
+        username: null,
+        token: null,
       });
     });
   };
 
-  return <AuthContext.Provider value={{ auth, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        username: auth.username,
+        token: auth.token,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {

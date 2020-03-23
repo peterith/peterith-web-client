@@ -22,16 +22,16 @@ const TaskList = ({
 
   const taskList = css`
     padding: 10px;
-    border: 2px solid ${colours.primary.light};
+    border: 2px solid ${colours.text};
     border-radius: 10px;
-    transition: border 0.3s;
+  `;
+
+  const darkMode = css`
+    transition: border-color 0.3s;
+    border-color: ${colours.primary.light};
     &:hover {
       border-color: ${colours.primary.dark};
     }
-  `;
-
-  const lightMode = css`
-    border-color: ${colours.text};
   `;
 
   const headingStyle = css`
@@ -54,7 +54,7 @@ const TaskList = ({
   return (
     <Droppable droppableId={uuidv4()}>
       {({ innerRef: ref, droppableProps, placeholder }) => (
-        <div ref={ref} {...droppableProps} css={isDarkMode ? taskList : [taskList, lightMode]}>
+        <div ref={ref} {...droppableProps} css={isDarkMode ? [taskList, darkMode] : taskList}>
           {onAddTask && (
             <span
               css={icon}
