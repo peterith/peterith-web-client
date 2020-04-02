@@ -30,16 +30,36 @@ const Contact = () => {
   return (
     <section css={contact}>
       <p css={text}>Let&apos;s keep in touch!</p>
-      <a css={link} href="https://www.linkedin.com/in/peterith" target="_blank" rel="noopener noreferrer">
+      <a
+        css={link}
+        href="https://www.linkedin.com/in/peterith"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <span className="fab fa-linkedin-in" /> LinkedIn
       </a>
-      <a css={link} href="https://www.github.com/peterith" target="_blank" rel="noopener noreferrer">
+      <a
+        css={link}
+        href="https://www.github.com/peterith"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <span className="fab fa-github" /> GitHub
       </a>
-      <a css={link} href="https://www.instagram.com/peterith" target="_blank" rel="noopener noreferrer">
+      <a
+        css={link}
+        href="https://www.instagram.com/peterith"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <span className="fab fa-instagram" /> Instagram
       </a>
-      <a css={link} href="https://www.facebook.com/lsimplel" target="_blank" rel="noopener noreferrer">
+      <a
+        css={link}
+        href="https://www.facebook.com/lsimplel"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <span className="fab fa-facebook" /> Facebook
       </a>
       <a css={link} href="mailto:p.rithisith@hotmail.com" target="_blank" rel="noopener noreferrer">

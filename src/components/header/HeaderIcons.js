@@ -7,10 +7,10 @@ import { useAuth, useDarkMode, useModal, useToast } from '../../hooks';
 const HeaderIcons = () => {
   const { colours } = useTheme();
   const history = useHistory();
-  const { username, token, logout } = useAuth();
+  const { user, logout } = useAuth();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { openAuthModal } = useModal();
-  const { addSuccessToast } = useToast();
+  const { addSuccessToast, addErrorToast } = useToast();
   const headerIcons = css`
     margin-left: auto;
   `;
@@ -36,16 +36,29 @@ const HeaderIcons = () => {
   `;
 
   const handleClickProfile = () => {
-    history.push(`/@${username}`);
+    history.push(`/@${user.username}`);
   };
 
-  const handleLogout = () => {
-    logout();
-    addSuccessToast(`See you soon, ${username}!`);
+  const handleLogout = async () => {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    switch (response.status) {
+      case 200:
+        logout();
+        addSuccessToast(`See you soon, ${user.username}.`);
+        break;
+      default:
+        addErrorToast('Unable to logout, please try again later.');
+        break;
+    }
   };
+
   return (
     <div css={headerIcons}>
-      {!token && (
+      {!user.id && (
         <span
           css={icon}
           className="fas fa-sign-in-alt"
@@ -56,7 +69,7 @@ const HeaderIcons = () => {
           onClick={openAuthModal}
         />
       )}
-      {token && (
+      {user.id && (
         <span
           css={icon}
           className="fas fa-user-alt"
@@ -67,7 +80,7 @@ const HeaderIcons = () => {
           onClick={handleClickProfile}
         />
       )}
-      {token && (
+      {user.id && (
         <span
           css={icon}
           className="fas fa-sign-out-alt"

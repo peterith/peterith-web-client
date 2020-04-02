@@ -5,12 +5,14 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useTheme } from 'emotion-theming';
 import { GET_CALENDAR_EVENTS_BY_DATE_RANGE } from '../../graphql/queries';
 import { ADD_CALENDAR_EVENT, DELETE_CALENDAR_EVENT } from '../../graphql/mutations';
-import { useToast, useModal } from '../../hooks';
+import { useToast, useModal, useProfile, useAuth } from '../../hooks';
 import CalendarHeader from './CalanderHeader';
 import CalendarGrid from './CalanderGrid';
 
 const Calendar = () => {
   const { colours } = useTheme();
+  const { user: authUser } = useAuth();
+  const { user: profileUser } = useProfile();
   const { addSuccessToast, addErrorToast } = useToast();
   const { openCalendarEventModal, closeModal } = useModal();
   const [events, setEvents] = useState([]);
@@ -26,9 +28,11 @@ const Calendar = () => {
 
   useQuery(GET_CALENDAR_EVENTS_BY_DATE_RANGE, {
     variables: {
+      userId: profileUser.id,
       startDate: new Date(selectedDate.year, selectedDate.month, 1 - previousMonth.getDay()),
       endDate: new Date(selectedDate.year, selectedDate.month + 1, (9 - nextMonth.getDay()) % 7),
     },
+    skip: !profileUser.id,
     onCompleted: ({ getCalendarEventsByDateRange }) => {
       setEvents(getCalendarEventsByDateRange);
     },
@@ -128,6 +132,7 @@ const Calendar = () => {
       <CalendarHeader
         year={selectedDate.year}
         month={selectedDate.month}
+        isViewOnly={!authUser.id || authUser.id !== profileUser.id}
         onToggleToday={handleToggleToday}
         onAddEvent={openCalendarEventModal({
           onSubmit: addCalendarEventMutation,

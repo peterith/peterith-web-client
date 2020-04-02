@@ -1,16 +1,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth, useModal, useToast } from '../../hooks';
-import { LOGIN } from '../../graphql/queries';
 import Heading from '../Heading';
 import Input from './Input';
 import { InputTypeEnum } from '../../utils/enums';
 import InputButton from './InputButton';
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { refreshUser } = useAuth();
   const { closeModal } = useModal();
   const { addSuccessToast, addErrorToast } = useToast();
   const [formValues, setFormValues] = useState({
@@ -18,36 +16,41 @@ const LoginForm = () => {
     password: '',
   });
 
-  // variables are passed at the query function due to apollo client bug, move variables back here when bug is fixed
-  const [loginQuery] = useLazyQuery(LOGIN, {
-    onCompleted: ({ login: { username, token } }) => {
-      closeModal();
-      login(username, token);
-      addSuccessToast(`Welcome back, ${username}!`);
-    },
-    onError: ({ graphQLErrors }) => {
-      addErrorToast(graphQLErrors[0].message);
-    },
-  });
-
   const style = css`
     border-bottom: 1px solid;
     padding-bottom: 20px;
   `;
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    loginQuery({
-      variables: {
-        user: formValues,
-      },
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formValues),
     });
+
+    switch (response.status) {
+      case 200: {
+        const { username } = await response.json();
+        closeModal();
+        refreshUser();
+        addSuccessToast(`Welcome back, ${username}.`);
+        break;
+      }
+      case 401:
+        addErrorToast('Incorrect username/email or password.');
+        break;
+      default:
+        addErrorToast('Unable to login, please try again later.');
+        break;
+    }
   };
 
-  const handleChange = (name) => ({ target: { value } }) => {
+  const handleChange = (field) => ({ target: { value } }) => {
     setFormValues((previousFormValues) => ({
       ...previousFormValues,
-      [name]: value,
+      [field]: value,
     }));
   };
 
@@ -56,7 +59,7 @@ const LoginForm = () => {
       <Heading headingLevel={2}>Login</Heading>
       <Input
         type={InputTypeEnum.TEXT}
-        label="Username"
+        label="Username/Email"
         onChange={handleChange('username')}
         value={formValues.username}
       />

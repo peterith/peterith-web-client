@@ -6,19 +6,22 @@ import { useTheme } from 'emotion-theming';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
+import { useProfile, useToast } from '../hooks';
 import { GET_TASKS } from '../graphql/queries';
 import { ADD_TASK, UPDATE_TASK, REORDER_TASK, DELETE_TASK } from '../graphql/mutations';
 import { TaskListEnum } from '../utils/enums';
 import TaskList from './TaskList';
-import { useToast } from '../hooks';
 
 const TaskPanel = ({ className }) => {
   const { colours } = useTheme();
+  const { user } = useProfile();
   const { addSuccessToast, addErrorToast } = useToast();
   const [lastSavedToDoTasks, setLastSavedToDoTasks] = useState([]);
   const [todoTasks, setToDoTasks] = useState([]);
 
   const { error } = useQuery(GET_TASKS, {
+    variables: { userId: user.id },
+    skip: !user.id,
     onCompleted: ({ getTasks }) => {
       setToDoTasks(getTasks.map(({ __typename, ...task }) => task));
       setLastSavedToDoTasks(getTasks.map(({ __typename, ...task }) => task));
@@ -81,7 +84,7 @@ const TaskPanel = ({ className }) => {
     },
   });
 
-  const grid = css`
+  const style = css`
     background-color: ${colours.background.secondary};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
     border-radius: 10px;
@@ -93,34 +96,34 @@ const TaskPanel = ({ className }) => {
       return;
     }
 
-    const highIndex = result.source.index > result.destination.index ? result.source.index : result.destination.index;
-    const lowIndex = highIndex === result.source.index ? result.destination.index : result.source.index;
+    const highIndex =
+      result.source.index > result.destination.index
+        ? result.source.index
+        : result.destination.index;
+    const lowIndex =
+      highIndex === result.source.index ? result.destination.index : result.source.index;
+
     const tasks = todoTasks
       .map((task) => {
         if (task.order < lowIndex || task.order > highIndex) {
           return task;
         }
         if (task.order === result.source.index) {
-          return {
-            ...task,
-            order: result.destination.index,
-          };
+          return { ...task, order: result.destination.index };
         }
-        if (result.source.index < result.destination.index) {
-          return {
-            ...task,
-            order: task.order - 1,
-          };
-        }
-        return {
-          ...task,
-          order: task.order + 1,
-        };
+        return result.source.index < result.destination.index
+          ? { ...task, order: task.order - 1 }
+          : { ...task, order: task.order + 1 };
       })
       .sort((a, b) => a.order - b.order);
+
     setToDoTasks(tasks);
-    const reorderedTask = todoTasks.find((task) => task.order === result.source.index);
-    reorderTaskMutation({ variables: { id: reorderedTask.id, newOrder: result.destination.index } });
+    reorderTaskMutation({
+      variables: {
+        id: todoTasks.find((task) => task.order === result.source.index).id,
+        newOrder: result.destination.index,
+      },
+    });
   };
 
   const handleAddTask = () => {
@@ -137,36 +140,30 @@ const TaskPanel = ({ className }) => {
   const handleChangeTask = (field) => (id, value) => {
     setToDoTasks((previousTasks) => {
       return previousTasks.map((task) => {
-        return task.id === id || task.tempId === id
-          ? {
-              ...task,
-              [field]: value,
-            }
-          : task;
+        return task.id === id || task.tempId === id ? { ...task, [field]: value } : task;
       });
     });
   };
 
   const handleClickOutsideTask = (id) => {
-    const { id: _, tempId, ...referenceTask } = todoTasks.find((task) => task.id === id || task.tempId === id);
+    const { id: _, tempId, ...referenceTask } = todoTasks.find(
+      (task) => task.id === id || task.tempId === id,
+    );
     if (referenceTask.title) {
       if (tempId) {
         addTaskMutation({
-          variables: {
-            task: referenceTask,
-          },
+          variables: { task: referenceTask },
         });
       } else {
-        const lastSavedReferenceTask = lastSavedToDoTasks.find((lastSavedTask) => lastSavedTask.id === id);
+        const lastSavedReferenceTask = lastSavedToDoTasks.find(
+          (lastSavedTask) => lastSavedTask.id === id,
+        );
         if (
           lastSavedReferenceTask.title !== referenceTask.title ||
           lastSavedReferenceTask.deadline !== referenceTask.deadline
         ) {
           updateTaskMutation({
-            variables: {
-              id,
-              task: referenceTask,
-            },
+            variables: { id, task: referenceTask },
           });
         }
       }
@@ -181,23 +178,19 @@ const TaskPanel = ({ className }) => {
         if (cur.id === id) {
           return acc;
         }
-        return cur.order === index
-          ? acc.concat(cur)
-          : acc.concat({
-              ...cur,
-              order: cur.order - 1,
-            });
+        return cur.order === index ? acc.concat(cur) : acc.concat({ ...cur, order: cur.order - 1 });
       }, []);
     });
     deleteTaskMutation({ variables: { id } });
   };
+
   if (error) {
     return <div>Unable to get tasks, please try again later.</div>;
   }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div css={grid} className={className}>
+      <div css={style} className={className}>
         <TaskList
           heading="To Do"
           tasks={todoTasks}

@@ -1,9 +1,9 @@
 export const validateUsername = (username) => {
-  return username.match(/^[a-zA-Z0-9]{6,20}$/);
+  return username.match(/^(?=.{6,36}$)[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/);
 };
 
 export const validateEmail = (email) => {
-  return email.includes('@');
+  return email.includes('@') && email.length < 255;
 };
 
 export const validatePassword = (password) => {

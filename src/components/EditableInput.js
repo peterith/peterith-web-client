@@ -5,12 +5,20 @@ import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { useToggle, useClickOutside } from '../hooks';
 
-const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange, onBlur, onDelete }) => {
+const EditableInput = ({
+  type,
+  value,
+  placeholder,
+  isInitiallyEditing,
+  isEditable,
+  onChange,
+  onClickOutside,
+}) => {
   const { colours } = useTheme();
   const [isEditing, toggleEditing] = useToggle(isInitiallyEditing);
   const node = useClickOutside(isEditing, () => {
     toggleEditing();
-    onBlur();
+    onClickOutside();
   });
 
   useEffect(() => {
@@ -54,12 +62,11 @@ const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange,
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
-          onBlur={onBlur}
         />
       ) : (
         value
       )}
-      {!isEditing && (
+      {isEditable && !isEditing && (
         <div css={icons}>
           <span
             css={icon}
@@ -69,18 +76,7 @@ const EditableInput = ({ type, value, placeholder, isInitiallyEditing, onChange,
             tabIndex="0"
             onKeyPress={toggleEditing}
             onClick={toggleEditing}
-          />{' '}
-          {onDelete && (
-            <span
-              css={icon}
-              className="fas fa-trash-alt"
-              role="button"
-              aria-label="delete field"
-              tabIndex="0"
-              onKeyPress={onDelete}
-              onClick={onDelete}
-            />
-          )}
+          />
         </div>
       )}
     </div>
@@ -92,16 +88,15 @@ EditableInput.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   isInitiallyEditing: PropTypes.bool,
+  isEditable: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
-  onDelete: PropTypes.func,
+  onClickOutside: PropTypes.func.isRequired,
 };
 
 EditableInput.defaultProps = {
   value: '',
   placeholder: null,
   isInitiallyEditing: false,
-  onDelete: null,
 };
 
 export default EditableInput;

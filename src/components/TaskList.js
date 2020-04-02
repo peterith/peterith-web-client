@@ -4,7 +4,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
-import { useDarkMode } from '../hooks';
+import { useDarkMode, useProfile, useAuth } from '../hooks';
 import TaskItem from './TaskItem';
 import Heading from './Heading';
 
@@ -19,11 +19,15 @@ const TaskList = ({
 }) => {
   const { colours } = useTheme();
   const { isDarkMode } = useDarkMode();
+  const { user: authUser } = useAuth();
+  const { user: profileUser } = useProfile();
 
   const taskList = css`
     padding: 10px;
     border: 2px solid ${colours.text};
     border-radius: 10px;
+    overflow: auto;
+    height: 500px;
   `;
 
   const darkMode = css`
@@ -55,7 +59,7 @@ const TaskList = ({
     <Droppable droppableId={uuidv4()}>
       {({ innerRef: ref, droppableProps, placeholder }) => (
         <div ref={ref} {...droppableProps} css={isDarkMode ? [taskList, darkMode] : taskList}>
-          {onAddTask && (
+          {authUser.id && authUser.id === profileUser.id && (
             <span
               css={icon}
               className="fas fa-plus"
@@ -70,7 +74,12 @@ const TaskList = ({
             {heading}
           </Heading>
           {tasks.map((task) => (
-            <Draggable key={task.id || task.tempId} draggableId={task.id || task.tempId} index={task.order}>
+            <Draggable
+              key={task.id || task.tempId}
+              draggableId={task.id || task.tempId}
+              index={task.order}
+              isDragDisabled={!authUser.id || authUser.id !== profileUser.id}
+            >
               {({ innerRef, draggableProps, dragHandleProps }) => (
                 <div ref={innerRef} {...draggableProps} {...dragHandleProps} css={draggable}>
                   <TaskItem

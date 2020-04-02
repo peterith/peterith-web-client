@@ -62,8 +62,6 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
   const icons = css`
     grid-column: 2;
     grid-row: 1;
-    display: flex;
-    justify-content: space-between;
   `;
 
   const icon = css`
@@ -99,10 +97,15 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
       ) : (
         <span>{task.title}</span>
       )}
-      {task.deadline && !isEditing && <span css={deadline}>{new Date(task.deadline).toLocaleDateString()}</span>}
+      {task.deadline && !isEditing && (
+        <span css={deadline}>{new Date(task.deadline).toLocaleDateString()}</span>
+      )}
       {isEditing && (
         <div css={deadline}>
-          <DatePicker selected={task.deadline && new Date(task.deadline)} onChange={handleChangeDeadline} />
+          <DatePicker
+            selected={task.deadline && new Date(task.deadline)}
+            onChange={handleChangeDeadline}
+          />
         </div>
       )}
       {!isEditing && (

@@ -13,6 +13,10 @@ export const ColourTypeEnum = {
   SECONDARY: 'secondary',
 };
 
+export const ErrorTypeEnum = {
+  BAD_USER_INPUT: 'BAD_USER_INPUT',
+};
+
 export const InputTypeEnum = {
   EMAIL: 'email',
   PASSWORD: 'password',
@@ -20,8 +24,8 @@ export const InputTypeEnum = {
 };
 
 export const ModalEnum = {
-  AUTH: 'AUTH',
-  CALENDAR_EVENT: 'CALENDAR_EVENT',
+  AUTH_FORMS: 'AuthForms',
+  CALENDAR_EVENT_FORM: 'CalendarEventForm',
 };
 
 export const TaskListEnum = {

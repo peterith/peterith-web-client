@@ -4,7 +4,15 @@ import React from 'react';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 
-const CalendarHeader = ({ year, month, onToggleToday, onAddEvent, onToggleMonthLeft, onToggleMonthRight }) => {
+const CalendarHeader = ({
+  year,
+  month,
+  isViewOnly,
+  onToggleToday,
+  onAddEvent,
+  onToggleMonthLeft,
+  onToggleMonthRight,
+}) => {
   const { colours } = useTheme();
 
   const headerColour = css`
@@ -88,15 +96,17 @@ const CalendarHeader = ({ year, month, onToggleToday, onAddEvent, onToggleMonthL
       </div>
       <div css={[yearStyle, headerColour]}>{year}</div>
       <div css={[addIconContainer, headerColour]}>
-        <span
-          css={[addIcon, hover]}
-          className="fas fa-plus"
-          role="button"
-          aria-label="add event"
-          tabIndex="0"
-          onKeyPress={onAddEvent}
-          onClick={onAddEvent}
-        />
+        {!isViewOnly && (
+          <span
+            css={[addIcon, hover]}
+            className="fas fa-plus"
+            role="button"
+            aria-label="add event"
+            tabIndex="0"
+            onKeyPress={onAddEvent}
+            onClick={onAddEvent}
+          />
+        )}
       </div>
       <div css={[icon, headerColour]}>
         <span
@@ -150,10 +160,15 @@ const CalendarHeader = ({ year, month, onToggleToday, onAddEvent, onToggleMonthL
 CalendarHeader.propTypes = {
   year: PropTypes.number.isRequired,
   month: PropTypes.number.isRequired,
+  isViewOnly: PropTypes.bool,
   onToggleToday: PropTypes.func.isRequired,
   onAddEvent: PropTypes.func.isRequired,
   onToggleMonthLeft: PropTypes.func.isRequired,
   onToggleMonthRight: PropTypes.func.isRequired,
+};
+
+CalendarHeader.defaultProps = {
+  isViewOnly: true,
 };
 
 export default CalendarHeader;
