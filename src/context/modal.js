@@ -5,20 +5,9 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { ModalEnum } from '../utils/enums';
 import Modal from '../components/Modal';
-import { AuthForms, CalendarEventForm } from '../components/forms';
+import * as forms from '../components/forms';
 
 const ModalContext = createContext();
-
-const getModalContent = (modalType) => {
-  switch (modalType) {
-    case ModalEnum.AUTH:
-      return AuthForms;
-    case ModalEnum.CALENDAR_EVENT:
-      return CalendarEventForm;
-    default:
-      return null;
-  }
-};
 
 const ModalProvider = ({ children }) => {
   const [options, setOptions] = useState({
@@ -34,12 +23,12 @@ const ModalProvider = ({ children }) => {
     height: 100vh;
   `;
 
-  const ModalContent = getModalContent(options.modalType);
+  const ModalContent = forms[options.modalType];
 
   const openAuthModal = () => {
     setOptions({
       isOpened: true,
-      modalType: ModalEnum.AUTH,
+      modalType: ModalEnum.AUTH_FORMS,
       payload: {},
     });
   };
@@ -47,7 +36,7 @@ const ModalProvider = ({ children }) => {
   const openCalendarEventModal = (payload) => () => {
     setOptions({
       isOpened: true,
-      modalType: ModalEnum.CALENDAR_EVENT,
+      modalType: ModalEnum.CALENDAR_EVENT_FORM,
       payload,
     });
   };

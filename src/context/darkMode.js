@@ -11,35 +11,55 @@ const DarkModeProvider = ({ children }) => {
     localStorage.getItem('isDarkMode') === 'true' || !localStorage.getItem('isDarkMode'),
   );
 
-  const commonColours = {
-    primary: { main: '#f25e5e', dark: '#d73e3e', light: '#f0a0a2' },
-    secondary: { main: '#4d5389', dark: '#3d4070', light: '#858cb1' },
+  const colours = {
+    primary: {
+      main: '#f25e5e',
+      dark: '#d73e3e',
+      light: '#f0a0a2',
+    },
+    secondary: {
+      main: '#4d5389',
+      dark: '#3d4070',
+      light: '#858cb1',
+    },
     success: '#4fb',
     black: '#313147',
     white: '#fff',
+    fitbit: {
+      main: '#49AEB5',
+      dark: '#3e8486',
+    },
   };
 
   const darkMode = {
     colours: {
-      ...commonColours,
-      background: { primary: '#1c2c3d', secondary: '#2e4055' },
+      ...colours,
+      background: {
+        primary: '#1c2c3d',
+        secondary: '#2e4055',
+      },
       text: '#ededed',
     },
   };
 
   const lightMode = {
     colours: {
-      ...commonColours,
-      background: { primary: '#fff', secondary: '#fff' },
+      ...colours,
+      background: {
+        primary: '#fff',
+        secondary: '#fff',
+      },
       text: '#313147',
     },
   };
 
   const style = css`
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-        'Droid Sans', 'Helvetica Neue', sans-serif;
-      background-color: ${isDarkMode ? darkMode.colours.background.primary : lightMode.colours.background.primary};
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      background-color: ${isDarkMode
+        ? darkMode.colours.background.primary
+        : lightMode.colours.background.primary};
       color: ${isDarkMode ? darkMode.colours.text : lightMode.colours.text};
       margin: 0px;
       transition: background-color 0.3s;
@@ -56,7 +76,9 @@ const DarkModeProvider = ({ children }) => {
   const toggleDarkMode = () => {
     setDarkMode((previousIsDarkMode) => {
       const value =
-        localStorage.getItem('isDarkMode') === 'true' || !localStorage.getItem('isDarkMode') ? 'false' : 'true';
+        localStorage.getItem('isDarkMode') === 'true' || !localStorage.getItem('isDarkMode')
+          ? 'false'
+          : 'true';
       localStorage.setItem('isDarkMode', value);
       return !previousIsDarkMode;
     });

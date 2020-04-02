@@ -1,19 +1,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useHistory } from 'react-router-dom';
 import { useTheme } from 'emotion-theming';
-import { useAuth, useDarkMode, useModal, useToast } from '../../hooks';
 import Nav from './Nav';
+import HeaderIcons from './HeaderIcons';
 
 const Header = () => {
-  const history = useHistory();
   const { colours } = useTheme();
-  const { auth, logout } = useAuth();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const { openAuthModal } = useModal();
-  const { addSuccessToast } = useToast();
 
-  const header = css`
+  const style = css`
     padding: 20px;
     background-color: ${colours.background.secondary};
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
@@ -29,87 +23,10 @@ const Header = () => {
     opacity: 1;
   `;
 
-  const icons = css`
-    margin-left: auto;
-  `;
-
-  const icon = css`
-    font-size: 1.3rem;
-    padding: 8px;
-    transition: color 0.3s;
-    cursor: pointer;
-    &:hover {
-      color: ${colours.primary.main};
-    }
-  `;
-
-  const rotate = css`
-    transition: transform 0.3s;
-    @media (hover: hover) {
-      &:hover {
-        color: ${colours.primary.main};
-        transform: rotate(-70deg);
-      }
-    }
-  `;
-
-  const handleClickProfile = () => {
-    history.push(`/@${auth.username}`);
-  };
-
-  const handleLogout = () => {
-    const { username } = auth;
-    logout();
-    addSuccessToast(`See you soon, ${username}!`);
-  };
-
   return (
-    <header css={header}>
+    <header css={style}>
       <Nav />
-      <div css={icons}>
-        {!auth.token && (
-          <span
-            css={icon}
-            className="fas fa-sign-in-alt"
-            role="button"
-            aria-label="login/register"
-            tabIndex="0"
-            onKeyPress={openAuthModal}
-            onClick={openAuthModal}
-          />
-        )}
-        {auth.token && (
-          <span
-            css={icon}
-            className="fas fa-user-alt"
-            role="button"
-            aria-label="open profile"
-            tabIndex="0"
-            onKeyPress={handleClickProfile}
-            onClick={handleClickProfile}
-          />
-        )}
-        {auth.token && (
-          <span
-            css={icon}
-            className="fas fa-sign-out-alt"
-            role="button"
-            aria-label="logout"
-            tabIndex="0"
-            onKeyPress={handleLogout}
-            onClick={handleLogout}
-          />
-        )}
-        <span
-          css={[icon, rotate]}
-          className={isDarkMode ? 'fas fa-sun' : 'fas fa-moon'}
-          role="button"
-          aria-label="toggle dark mode"
-          tabIndex="0"
-          onKeyPress={toggleDarkMode}
-          onClick={toggleDarkMode}
-        />
-      </div>
+      <HeaderIcons />
     </header>
   );
 };

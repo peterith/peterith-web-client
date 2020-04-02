@@ -1,60 +1,52 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
 import { useAuth, useModal, useToast } from '../../hooks';
-import { REGISTER_USER } from '../../graphql/mutations';
-import { validateUsername, validateEmail, validatePassword } from '../../utils/validation';
+import { validateEmail, validatePassword } from '../../utils/validation';
 import Heading from '../Heading';
 import Input from './Input';
 import { InputTypeEnum } from '../../utils/enums';
 import InputButton from './InputButton';
 
 const RegistrationForm = () => {
-  const { login } = useAuth();
+  const { refreshUser } = useAuth();
   const { closeModal } = useModal();
   const { addSuccessToast, addErrorToast } = useToast();
   const [formValues, setFormValues] = useState({
-    username: '',
     email: '',
     password: '',
   });
 
-  const [registerUser] = useMutation(REGISTER_USER, {
-    variables: {
-      user: formValues,
-    },
-    onCompleted: ({ registerUser: { username, token } }) => {
-      closeModal();
-      login(username, token);
-      addSuccessToast(`Welcome, ${username}!`);
-    },
-    onError: ({ graphQLErrors }) => {
-      addErrorToast(graphQLErrors[0].message);
-    },
-  });
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (isFormValid()) {
-      registerUser();
+    if (validateEmail(formValues.email) && validatePassword(formValues.password)) {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/register`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formValues),
+      });
+
+      switch (response.status) {
+        case 200: {
+          closeModal();
+          refreshUser();
+          addSuccessToast(`Please update your username.`);
+          break;
+        }
+        case 422:
+          addErrorToast('Incorrect email or password format.');
+          break;
+        case 409:
+          addErrorToast('Email is already registerded.');
+          break;
+        default:
+          addErrorToast('Unable to register, please try again later.');
+          break;
+      }
+    } else {
+      addErrorToast(`Invalid email or password format.`);
     }
-  };
-
-  const isFormValid = () => {
-    const isUsernameValid = validateField('username', validateUsername);
-    const isEmailValid = validateField('email', validateEmail);
-    const isPasswordValid = validateField('password', validatePassword);
-
-    return isUsernameValid && isEmailValid && isPasswordValid;
-  };
-
-  const validateField = (field, validateFormValue) => {
-    if (validateFormValue(formValues[field])) {
-      return true;
-    }
-    addErrorToast(`You have entered an invalid ${field}.`);
-    return false;
   };
 
   const handleChange = (name) => ({ target: { value } }) => {
@@ -68,17 +60,8 @@ const RegistrationForm = () => {
     <form onSubmit={handleSubmit}>
       <Heading headingLevel={2}>Register</Heading>
       <Input
-        type={InputTypeEnum.TEXT}
-        label="Username"
-        description="Username must contain 6-20 alphanumeric characters!"
-        isRequired
-        onChange={handleChange('username')}
-        value={formValues.username}
-      />
-      <Input
         type={InputTypeEnum.EMAIL}
         label="Email"
-        description="Please provide a valid email address!"
         isRequired
         onChange={handleChange('email')}
         value={formValues.email}

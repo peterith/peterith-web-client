@@ -50,23 +50,12 @@ export const DELETE_TASK = gql`
 export const DELETE_USER = gql`
   mutation DeleteUser($password: String!) {
     deleteUser(password: $password) {
-      firstName
-      lastName
+      fullName
       username
       email
       role
       createdAt
       updatedAt
-    }
-  }
-`;
-
-export const REGISTER_USER = gql`
-  mutation RegisterUser($user: UserInput!) {
-    registerUser(user: $user) {
-      token
-      username
-      email
     }
   }
 `;
@@ -98,9 +87,9 @@ export const UPDATE_TASK = gql`
 `;
 
 export const UPDATE_USER = gql`
-  mutation UpdateUser($user: UserInput!) {
-    updateUser(user: $user) {
-      token
+  mutation UpdateUser($id: ID!, $user: UserInput!) {
+    updateUser(id: $id, user: $user) {
+      fullName
       username
       email
     }

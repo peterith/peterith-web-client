@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { Route, Switch } from 'react-router-dom';
+import { ProfileProvider } from '../context';
 import About from './About';
 import Contact from './Contact';
 import ProfileDashboard from './ProfileDashboard';
@@ -24,7 +25,9 @@ const Main = () => {
           <Contact />
         </Route>
         <Route path="/@:username">
-          <ProfileDashboard />
+          <ProfileProvider>
+            <ProfileDashboard />
+          </ProfileProvider>
         </Route>
       </Switch>
     </main>

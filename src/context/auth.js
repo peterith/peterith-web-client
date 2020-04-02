@@ -1,49 +1,39 @@
-import React, { createContext, useState } from 'react';
-import { useApolloClient } from '@apollo/react-hooks';
+import React, { createContext, useState, useEffect } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { GET_AUTH_USER } from '../graphql/queries';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const history = useHistory();
-  const client = useApolloClient();
-  const [auth, setAuth] = useState({
-    username: localStorage.getItem('username'),
-    token: localStorage.getItem('token'),
+  const [user, setUser] = useState({});
+
+  // https://github.com/apollographql/react-apollo/issues/3709
+  // apollo client does not run onCompleted callback on refetch.
+  // Until this is fixed, we need to use a combination of useLazyQuery and useEffect
+  const [refreshUser, { client }] = useLazyQuery(GET_AUTH_USER, {
+    fetchPolicy: 'network-only',
+    onCompleted: ({ getAuthUser: { __typename, ...getAuthUser } }) => {
+      setUser(getAuthUser);
+    },
   });
 
-  const login = async (username, token) => {
-    localStorage.setItem('username', username);
-    localStorage.setItem('token', token);
-    client.clearStore().then(() => {
-      history.push(`/@${username}`);
-      setAuth((previousAuth) => {
-        return {
-          ...previousAuth,
-          username,
-          token,
-        };
-      });
-    });
-  };
+  useEffect(() => {
+    refreshUser();
+  }, [refreshUser]);
 
-  const logout = async () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('token');
+  const logout = () => {
     client.clearStore().then(() => {
       history.push('/');
-      setAuth((previousAuth) => {
-        return {
-          ...previousAuth,
-          username: null,
-          token: null,
-        };
-      });
+      setUser({});
     });
   };
 
-  return <AuthContext.Provider value={{ auth, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, refreshUser, logout }}>{children}</AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {
