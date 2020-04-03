@@ -3,13 +3,14 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import { GET_USER } from '../graphql/queries';
-import { useToggle } from '../hooks';
+import { useToggle, useAuth } from '../hooks';
 
 const ProfileContext = createContext();
 
 const ProfileProvider = ({ children }) => {
   const { username } = useParams();
   const history = useHistory();
+  const { user: authUser } = useAuth();
   const [user, setUser] = useState({});
   const [errors, setErrors] = useState([]);
   const [hasNetworkError, toggleNetworkError] = useToggle(false);
@@ -44,7 +45,7 @@ const ProfileProvider = ({ children }) => {
 
   useEffect(() => {
     refreshUser({ variables: { username } });
-  }, [refreshUser, username]);
+  }, [refreshUser, username, authUser]);
 
   return (
     <ProfileContext.Provider value={{ user, refreshUser, errors, hasNetworkError }}>

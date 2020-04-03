@@ -1,13 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { GET_AUTH_USER } from '../graphql/queries';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const history = useHistory();
   const [user, setUser] = useState({});
 
   // https://github.com/apollographql/react-apollo/issues/3709
@@ -26,7 +24,6 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     client.clearStore().then(() => {
-      history.push('/');
       setUser({});
     });
   };

@@ -7,7 +7,14 @@ import PropTypes from 'prop-types';
 import { useDarkMode, useToggle, useClickOutside } from '../hooks';
 import { InputTypeEnum } from '../utils/enums';
 
-const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDelete }) => {
+const TaskItem = ({
+  task,
+  isEditable,
+  onChangeTitle,
+  onChangeDeadline,
+  onClickOutside,
+  onDelete,
+}) => {
   const { colours } = useTheme();
   const { isDarkMode } = useDarkMode();
   const [isEditing, toggleEditing] = useToggle(!!task.tempId);
@@ -108,7 +115,7 @@ const TaskItem = ({ task, onChangeTitle, onChangeDeadline, onClickOutside, onDel
           />
         </div>
       )}
-      {!isEditing && (
+      {isEditable && !isEditing && (
         <div css={icons}>
           <span
             css={icon}
@@ -144,10 +151,15 @@ TaskItem.propTypes = {
     isPublic: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
   }).isRequired,
+  isEditable: PropTypes.bool,
   onChangeTitle: PropTypes.func.isRequired,
   onChangeDeadline: PropTypes.func.isRequired,
   onClickOutside: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+};
+
+TaskItem.defaultProps = {
+  isEditable: false,
 };
 
 export default TaskItem;

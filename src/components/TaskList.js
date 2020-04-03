@@ -84,6 +84,7 @@ const TaskList = ({
                 <div ref={innerRef} {...draggableProps} {...dragHandleProps} css={draggable}>
                   <TaskItem
                     task={task}
+                    isEditable={authUser.id && authUser.id === profileUser.id}
                     onChangeTitle={onChangeTaskTitle}
                     onChangeDeadline={onChangeTaskDeadline}
                     onClickOutside={onClickOutsideTask}
