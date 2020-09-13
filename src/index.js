@@ -5,6 +5,8 @@ import ApolloClient from 'apollo-client';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { AuthProvider, DarkModeProvider, ToastProvider, ModalProvider } from './context';
 import App from './components/App';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,6 +18,8 @@ const client = new ApolloClient({
   }),
   cache: new InMemoryCache(),
 });
+
+library.add(faChevronRight);
 
 ReactDOM.render(
   <Router>

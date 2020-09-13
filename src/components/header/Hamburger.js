@@ -63,9 +63,6 @@ const Hamburger = () => {
           <Link to="/" css={link} onClick={toggleNavOpened}>
             about
           </Link>
-          <Link to="/contact" css={link} onClick={toggleNavOpened}>
-            contact
-          </Link>
         </div>
       )}
     </div>
