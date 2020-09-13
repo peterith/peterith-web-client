@@ -11,6 +11,7 @@ const HeaderIcons = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { openAuthModal } = useModal();
   const { addSuccessToast, addErrorToast } = useToast();
+
   const headerIcons = css`
     margin-left: auto;
   `;

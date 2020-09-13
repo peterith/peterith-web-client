@@ -6,3 +6,4 @@ export { default as useModal } from './useModal';
 export { default as useProfile } from './useProfile';
 export { default as useToast } from './useToast';
 export { default as useToggle } from './useToggle';
+export { default as useWindowWidth } from './useWindowWidth';

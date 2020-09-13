@@ -34,8 +34,13 @@ const DarkModeProvider = ({ children }) => {
   const darkMode = {
     colours: {
       ...colours,
-      background: {
-        primary: '#1c2c3d',
+      background: '#121212',
+      surface: {
+        low: 'rgba(255, 255, 255, 0.07)',
+        high: 'rgba(255, 255, 255, 0.16)',
+      },
+      backgroundt: {
+        primary: '#121212',
         secondary: '#2e4055',
       },
       text: '#ededed',
@@ -57,9 +62,7 @@ const DarkModeProvider = ({ children }) => {
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
         'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-      background-color: ${isDarkMode
-        ? darkMode.colours.background.primary
-        : lightMode.colours.background.primary};
+      background-color: ${isDarkMode ? darkMode.colours.background : lightMode.colours.background};
       color: ${isDarkMode ? darkMode.colours.text : lightMode.colours.text};
       margin: 0px;
       transition: background-color 0.3s;
@@ -68,7 +71,7 @@ const DarkModeProvider = ({ children }) => {
       line-height: 1.5rem;
     }
     div,
-    span {
+    svg {
       outline: none;
     }
   `;
