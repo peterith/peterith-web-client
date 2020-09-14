@@ -24,6 +24,7 @@ const Hero = () => {
   `;
 
   const photo = css`
+    grid-column: 1/3;
     border: 5px solid ${colours.surface.high};
     border-radius: 100%;
     width: 250px;
@@ -34,7 +35,6 @@ const Hero = () => {
         border: 5px solid ${colours.primary.main};
       }
     }
-    grid-column: 1/3;
     @media (min-width: 641px) {
       width: 300px;
     }
@@ -45,10 +45,10 @@ const Hero = () => {
   `;
 
   const name = css`
+    grid-column: 1/3;
     font-weight: normal;
     margin: 10px 0px;
     align-self: flex-end;
-    grid-column: 1/3;
     font-size: 2rem;
     @media (min-width: 641px) {
       font-size: 3rem;
@@ -74,13 +74,14 @@ const Hero = () => {
   `;
 
   const domain = css`
-    font-size: 1rem;
+    font-size: 0.9rem;
     grid-column: 1/3;
     @media (min-width: 641px) {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
     @media (min-width: 961px) {
       grid-column: 1;
+      font-size: 1.4rem;
     }
   `;
 

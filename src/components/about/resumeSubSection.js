@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useTheme } from 'emotion-theming';
+import PropTypes from 'prop-types';
 import Pill from './pill';
 
 const ResumeSubSection = ({
@@ -10,85 +11,107 @@ const ResumeSubSection = ({
   location,
   startDate,
   endDate,
-  content,
+  descriptions,
   className,
 }) => {
   const { colours } = useTheme();
 
-  const subSection = css`
-    background: ${colours.surface.low};
-    border-radius: 10px;
-    padding: 30px;
-    &:not(:first-child) {
-      margin-top: 50px;
-    }
-  `;
-
-  const subHeading = css`
-    display: flex;
-    font-size: 1.2rem;
-    @media (min-width: 641px) {
-      font-size: 1.4rem;
-    }
-  `;
-
-  const red = css`
-    color: ${colours.primary.main};
-  `;
-
-  const right = css`
-    margin-left: auto;
-  `;
-
-  const pillsStyle = css`
-    display: flex;
-    flex-wrap: wrap;
-    @media (min-width: 641px) {
+  const styles = {
+    container: css`
+      background: ${colours.surface.low};
+      border-radius: 10px;
+      padding: 15px;
+      &:not(:first-of-type) {
+        margin-top: 50px;
+      }
+      @media (min-width: 641px) {
+        padding: 30px;
+      }
+    `,
+    heading: css`
+      display: flex;
+      flex-direction: column;
+      @media (min-width: 961px) {
+        flex-direction: row;
+      }
+    `,
+    leftHeading: css`
+      margin-top: 0px;
       font-size: 1.2rem;
-    }
-  `;
-
-  const pillStyle = css`
-    margin: 5px;
-  `;
-
-  const list = css`
-    padding-left: 20px;
-    @media (min-width: 641px) {
-      font-size: 1.2rem;
-    }
-  `;
-
-  const item = css`
-    margin: 10px 0px;
-  `;
+      @media (min-width: 641px) {
+        font-size: 1.4rem;
+      }
+    `,
+    red: css`
+      color: ${colours.primary.main};
+    `,
+    rightHeading: css`
+      margin-top: 0px;
+      font-size: 1.1rem;
+      @media (min-width: 641px) {
+        font-size: 1.3rem;
+      }
+      @media (min-width: 961px) {
+        margin-left: auto;
+      }
+    `,
+    descriptions: css`
+      padding-left: 20px;
+      @media (min-width: 641px) {
+        font-size: 1.2rem;
+      }
+    `,
+    description: css`
+      margin: 10px 0px;
+    `,
+    pills: css`
+      display: flex;
+      flex-wrap: wrap;
+    `,
+  };
 
   return (
-    <section css={subSection} className={className}>
-      <div css={subHeading}>
-        <p>
-          <span css={red}>{position}</span> @ {company}
+    <section css={styles.container} className={className}>
+      <div css={styles.heading}>
+        <p css={styles.leftHeading}>
+          <span css={styles.red}>{position}</span> @ {company}
         </p>
-        <p css={right}>
-          {location} | {startDate} - {endDate}
+        <p css={styles.rightHeading}>
+          {location} | {startDate}
+          {endDate && ` - ${endDate}`}
         </p>
       </div>
-      <ul css={list}>
-        {content.map((c) => (
-          <li css={item}>{c}</li>
+      <ul css={styles.descriptions}>
+        {descriptions.map((description) => (
+          <li css={styles.description} key={description.replaceAll('\\s', '')}>
+            {description}
+          </li>
         ))}
       </ul>
-      <div css={pillsStyle}>
+      <div css={styles.pills}>
         {pills.map((pill) => (
-          <Pill css={pillStyle}>{pill}</Pill>
+          <Pill key={pill.replaceAll('\\s', '')}>{pill}</Pill>
         ))}
       </div>
     </section>
   );
 };
 
+ResumeSubSection.propTypes = {
+  position: PropTypes.string.isRequired,
+  company: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  startDate: PropTypes.string.isRequired,
+  endDate: PropTypes.string,
+  descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  pills: PropTypes.arrayOf(PropTypes.string),
+  className: PropTypes.string,
+};
+
 ResumeSubSection.defaultProps = {
+  endDate: null,
   pills: [],
+  className: null,
 };
 
 export default ResumeSubSection;
