@@ -4,16 +4,19 @@ import Hero from './hero';
 import Resume from './resume';
 
 const About = () => {
-  const about = css`
-    max-width: 960px;
-    padding: 0px 30px;
-    @media (min-width: 961px) {
+  const styles = {
+    container: css`
       margin: auto;
-    }
-  `;
+      max-width: 960px;
+      padding: 0px 10px;
+      @media (min-width: 641px) {
+        padding: 0px 30px;
+      }
+    `,
+  };
 
   return (
-    <main css={about}>
+    <main css={styles.container}>
       <Hero />
       <Resume />
     </main>

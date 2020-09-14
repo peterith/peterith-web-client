@@ -6,16 +6,23 @@ import PropTypes from 'prop-types';
 const Pill = ({ children, className }) => {
   const { colours } = useTheme();
 
-  const pill = css`
-    border: 3px solid ${colours.primary.main};
-    border-radius: 20px;
-    padding: 7px;
-    min-width: 40px;
-    text-align: center;
-  `;
+  const styles = {
+    container: css`
+      background: ${colours.primary.main};
+      color: ${colours.onPrimary};
+      border-radius: 20px;
+      padding: 7px;
+      margin: 5px;
+      min-width: 40px;
+      text-align: center;
+      @media (min-width: 641px) {
+        font-size: 1.2rem;
+      }
+    `,
+  };
 
   return (
-    <span css={pill} className={className}>
+    <span css={styles.container} className={className}>
       {children}
     </span>
   );

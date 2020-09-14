@@ -44,6 +44,7 @@ const DarkModeProvider = ({ children }) => {
         secondary: '#2e4055',
       },
       text: '#ededed',
+      onPrimary: '#000',
     },
   };
 
