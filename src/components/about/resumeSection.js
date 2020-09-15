@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { useToggle } from '../../hooks';
+import { slideUp } from '../../utils/keyframes';
 
 const ResumeSection = ({ heading, children, className }) => {
   const { colours } = useTheme();
@@ -14,10 +15,12 @@ const ResumeSection = ({ heading, children, className }) => {
       background: ${colours.surface.low};
       box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
       border-radius: 10px;
-      margin-bottom: 100px;
+      margin-top: 50px;
       padding: 10px;
+      animation: ${slideUp(30)} 1s;
       @media (min-width: 641px) {
         padding: 30px;
+        margin-top: 100px;
       }
     `,
     icon: css`
@@ -41,6 +44,9 @@ const ResumeSection = ({ heading, children, className }) => {
       font-size: 1.5rem;
       margin-top: 0px;
       @media (min-width: 641px) {
+        font-size: 1.8rem;
+      }
+      @media (min-width: 961px) {
         font-size: 2rem;
       }
     `,
@@ -65,7 +71,7 @@ const ResumeSection = ({ heading, children, className }) => {
         onKeyPress={toggleHiding}
         onClick={toggleHiding}
       />
-      <h2 css={styles.heading}>{heading}</h2>
+      <h3 css={styles.heading}>{heading}</h3>
       <div css={styles.hidable}>{children}</div>
     </section>
   );
