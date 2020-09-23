@@ -37,7 +37,7 @@ const Nav = () => {
       <div css={fullNav}>
         const <span css={title}>peterith</span> = [{' '}
         <Link to="/" css={pathname === '/' ? [link, selected] : [link, hover]}>
-          about
+          home
         </Link>
         ,{' '}
         <Link to="/" css={pathname === '/projects' ? [link, selected] : [link, hover]}>

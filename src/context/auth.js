@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
 import { GET_AUTH_USER } from '../graphql/queries';
 

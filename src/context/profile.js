@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
 import { GET_USER } from '../graphql/queries';
 import { useToggle, useAuth } from '../hooks';

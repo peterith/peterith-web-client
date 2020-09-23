@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { useTheme } from 'emotion-theming';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';

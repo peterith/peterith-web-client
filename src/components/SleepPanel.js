@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import { GET_CURRENT_WEEK_SLEEP } from '../graphql/queries';

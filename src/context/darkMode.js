@@ -72,6 +72,7 @@ const DarkModeProvider = ({ children }) => {
       line-height: 1.5rem;
     }
     div,
+    span,
     svg {
       outline: none;
     }
