@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { useTheme } from 'emotion-theming';
 import { GET_CALENDAR_EVENTS_BY_DATE_RANGE } from '../../graphql/queries';
 import { ADD_CALENDAR_EVENT, DELETE_CALENDAR_EVENT } from '../../graphql/mutations';

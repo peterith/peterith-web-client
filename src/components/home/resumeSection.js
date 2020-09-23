@@ -71,7 +71,7 @@ const ResumeSection = ({ heading, children, className }) => {
         onKeyPress={toggleHiding}
         onClick={toggleHiding}
       />
-      <h3 css={styles.heading}>{heading}</h3>
+      <h2 css={styles.heading}>{heading}</h2>
       <div css={styles.hidable}>{children}</div>
     </section>
   );

@@ -15,9 +15,6 @@ const Pill = ({ children, className }) => {
       margin: 5px;
       min-width: 40px;
       text-align: center;
-      @media (min-width: 641px) {
-        font-size: 1.2rem;
-      }
     `,
   };
 

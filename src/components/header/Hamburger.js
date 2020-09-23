@@ -61,7 +61,7 @@ const Hamburger = () => {
       {isNavOpened && (
         <div css={links}>
           <Link to="/" css={link} onClick={toggleNavOpened}>
-            about
+            home
           </Link>
         </div>
       )}
